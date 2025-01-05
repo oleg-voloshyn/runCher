@@ -1,0 +1,17 @@
+<h1>Your Activities</h1>
+
+<h2>Athlete Profile</h2>
+<p>Name: <%= @athlete.firstname %> <%= @athlete.lastname %></p>
+<p>City: <%= @athlete.city %></p>
+
+<h2>Activities</h2>
+<ul class="divide-y divide-gray-200">
+  <% @activities.each do |activity| %>
+    <li class="py-4 flex items-center">
+      <div class="ml-3">
+        <p class="text-sm font-medium text-gray-900"><%= activity.name %></p>
+        <p class="text-sm text-gray-500"><%= activity.distance %> meters</p>
+      </div>
+    </li>
+  <% end %>
+</ul>

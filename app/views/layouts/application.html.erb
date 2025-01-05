@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>StravaApp</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-100 text-gray-900">
+    <nav class="bg-blue-600 p-4 text-white">
+      <h1 class="text-xl font-bold">Strava App</h1>
+    </nav>
+
+    <main class="container mx-auto p-6">
+      <%= yield %>
+    </main>
+  </body>
+</html>
