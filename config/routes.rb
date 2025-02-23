@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   root 'strava#index'
-  get '/auth/strava/callback', to: 'strava#callback'
   get '/activities', to: 'strava#activities'
+  get '/auth/strava/callback', to: 'sessions#create' # Strava OAuth callback
+  delete '/logout', to: 'sessions#destroy' # Logout  
 end
