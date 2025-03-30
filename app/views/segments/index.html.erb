@@ -1,0 +1,20 @@
+<h1 class="text-2xl font-bold mb-4">Strava Segments</h1>
+
+<% if @segments.any? %>
+  <ul class="divide-y divide-gray-300">
+    <% @segments.each do |segment| %>
+      <li class="py-4">
+        <h2 class="text-xl font-semibold"><%= segment.name %></h2>
+        <p><strong>ID:</strong> <%= segment.strava_id %></p>
+        <p><strong>Distance:</strong> <%= segment.distance %> meters</p>
+        <p><strong>Avg Grade:</strong> <%= segment.average_grade %>%</p>
+        <p><strong>Max Grade:</strong> <%= segment.maximum_grade %>%</p>
+        <p><strong>Elevation:</strong> <%= segment.elevation_low %>m → <%= segment.elevation_high %>m</p>
+        <p><strong>Start:</strong> [<%= segment.start_latitude %>, <%= segment.start_longitude %>]</p>
+        <p><strong>End:</strong> [<%= segment.end_latitude %>, <%= segment.end_longitude %>]</p>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No segments found.</p>
+<% end %>

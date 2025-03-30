@@ -1,0 +1,12 @@
+<h1 class="text-2xl font-bold mb-4">Add a Strava Segment</h1>
+
+<%= form_with model: @segment, url: segments_path, method: :post, local: true, class: "space-y-4" do |f| %>
+  <div>
+    <%= f.label :strava_id, "Strava Segment ID", class: "block font-semibold mb-1" %>
+    <%= f.text_field :strava_id, class: "border rounded px-3 py-2 w-full" %>
+  </div>
+
+  <%= f.submit "Fetch & Save Segment", class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+<% end %>
+
+<%= link_to "← Back to Segments", segments_path, class: "inline-block mt-4 text-blue-600 hover:underline" %>

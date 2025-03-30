@@ -8,6 +8,7 @@ class StravaController < ApplicationController
     
     	@auth_url = "https://www.strava.com/oauth/authorize?client_id=#{client_id}&redirect_uri=#{redirect_uri}&response_type=#{response_type}&scope=#{scope}&approval_prompt=#{approval_prompt}"
     end      
+    
   
     def callback
 			code = params[:code]

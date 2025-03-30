@@ -23,6 +23,10 @@
           Login with Strava
         </a>
       <% end %>
+
+      <nav class="bg-gray-800 text-white p-4">
+        <%= link_to "Segments", segments_path, class: "mr-4 hover:underline" %>
+      </nav>
       <%= yield %>
     </main>
   </body>

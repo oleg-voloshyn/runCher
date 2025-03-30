@@ -9,4 +9,5 @@ Rails.application.routes.draw do
   get '/activities', to: 'strava#activities'
   get '/auth/strava/callback', to: 'sessions#create' # Strava OAuth callback
   delete '/logout', to: 'sessions#destroy' # Logout  
+  resources :segments, only: [:new, :create, :index]
 end
