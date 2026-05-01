@@ -130,16 +130,34 @@
             <tr class="<%= ts.is_rated ? 'bg-orange-50/40' : '' %>">
               <td class="px-6 py-3 font-medium text-gray-900"><%= ts.segment.name %></td>
               <td class="px-6 py-3 text-gray-500"><%= "%.1f km" % (ts.segment.distance / 1000) %></td>
-              <td class="px-6 py-3 text-center">
-                <% if ts.is_rated %>
-                  <span class="inline-block w-5 h-5 bg-orange-500 rounded-full text-white text-xs flex items-center justify-center">✓</span>
-                <% else %>
-                  <span class="text-gray-300">—</span>
+              <% if @tournament.status != 'completed' %>
+                <%= form_with url: admin_tournament_tournament_segment_path(@tournament, ts),
+                    method: :patch, class: "contents" do |f| %>
+                  <td class="px-6 py-3 text-center">
+                    <%= hidden_field_tag "tournament_segment[is_rated]", "0" %>
+                    <%= check_box_tag "tournament_segment[is_rated]", "1", ts.is_rated,
+                        class: "w-4 h-4 rounded text-orange-500 cursor-pointer",
+                        onchange: "this.form.requestSubmit()" %>
+                  </td>
+                  <td class="px-6 py-3 text-center">
+                    <%= number_field_tag "tournament_segment[order_number]", ts.order_number,
+                        min: 1, placeholder: "—",
+                        class: "w-14 border border-gray-200 rounded px-2 py-1 text-sm text-center focus:outline-none focus:ring-2 focus:ring-orange-400",
+                        onchange: "this.form.requestSubmit()" %>
+                  </td>
                 <% end %>
-              </td>
-              <td class="px-6 py-3 text-center text-gray-700 font-semibold">
-                <%= ts.order_number || '—' %>
-              </td>
+              <% else %>
+                <td class="px-6 py-3 text-center">
+                  <% if ts.is_rated %>
+                    <span class="inline-flex w-5 h-5 bg-orange-500 rounded-full text-white text-xs items-center justify-center">✓</span>
+                  <% else %>
+                    <span class="text-gray-300">—</span>
+                  <% end %>
+                </td>
+                <td class="px-6 py-3 text-center text-gray-700 font-semibold">
+                  <%= ts.order_number || '—' %>
+                </td>
+              <% end %>
               <td class="px-6 py-3 text-right">
                 <% if @tournament.status != 'completed' %>
                   <%= button_to "✕", admin_tournament_tournament_segment_path(@tournament, ts),

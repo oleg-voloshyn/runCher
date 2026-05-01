@@ -11,6 +11,15 @@ module Admin
       end
     end
 
+    def update
+      ts = @tournament.tournament_segments.find(params[:id])
+      if ts.update(ts_update_params)
+        redirect_to admin_tournament_path(@tournament), notice: "Сегмент «#{ts.segment.name}» оновлено"
+      else
+        redirect_to admin_tournament_path(@tournament), alert: ts.errors.full_messages.join(', ')
+      end
+    end
+
     def destroy
       ts = @tournament.tournament_segments.find(params[:id])
       ts.destroy
@@ -25,6 +34,10 @@ module Admin
 
     def ts_params
       params.require(:tournament_segment).permit(:segment_id, :is_rated, :order_number)
+    end
+
+    def ts_update_params
+      params.require(:tournament_segment).permit(:is_rated, :order_number)
     end
   end
 end
