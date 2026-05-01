@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import Layout from '../components/Layout'
 import Spinner from '../components/Spinner'
 import { useApi } from '../hooks/useApi'
@@ -16,6 +17,7 @@ const MEDALS = ['🥇', '🥈', '🥉']
 
 export default function Leaderboard() {
   const { id } = useParams()
+  const { t } = useTranslation()
   const [gender, setGender] = useState('')
 
   const { data, loading, error } = useApi(
@@ -23,22 +25,26 @@ export default function Leaderboard() {
     [id, gender]
   )
 
-  const tournament = data
   const rankings       = data?.rankings || []
   const segmentLeaders = data?.segment_leaders || []
+
+  const genderTabs = [
+    { key: '',       label: t('leaderboard.all') },
+    { key: 'male',   label: t('leaderboard.male') },
+    { key: 'female', label: t('leaderboard.female') },
+  ]
 
   return (
     <Layout>
       <div className="mb-8">
         <Link to={`/tournaments/${id}`} className="text-sm text-gray-400 hover:text-gray-600 mb-4 inline-block">
-          ← Назад до турніру
+          {t('leaderboard.back')}
         </Link>
         <div className="flex items-center justify-between flex-wrap gap-4">
-          <h1 className="text-3xl font-black text-gray-900">🏆 Рейтинг</h1>
+          <h1 className="text-3xl font-black text-gray-900">{t('leaderboard.title')}</h1>
 
-          {/* Gender tabs */}
           <div className="flex items-center bg-white border border-gray-200 rounded-xl p-1 gap-1">
-            {[{ key: '', label: 'Всі' }, { key: 'male', label: '♂ Чоловіки' }, { key: 'female', label: '♀ Жінки' }].map(({ key, label }) => (
+            {genderTabs.map(({ key, label }) => (
               <button
                 key={key}
                 onClick={() => setGender(key)}
@@ -63,13 +69,13 @@ export default function Leaderboard() {
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
               <div className="px-6 py-4 border-b border-gray-100">
-                <h2 className="font-bold text-gray-900">Загальний рейтинг</h2>
+                <h2 className="font-bold text-gray-900">{t('leaderboard.overall')}</h2>
               </div>
 
               {rankings.length === 0 ? (
                 <div className="px-6 py-12 text-center text-gray-400">
                   <p className="text-4xl mb-3">🏁</p>
-                  <p>Ще немає результатів</p>
+                  <p>{t('leaderboard.noResults')}</p>
                 </div>
               ) : (
                 <div className="divide-y divide-gray-50">
@@ -100,7 +106,7 @@ export default function Leaderboard() {
                           {p.gender === 'female' ? '♀' : '♂'}
                           {p.completion_order && (
                             <span className="ml-2 text-green-600 font-medium">
-                              ✓ фінішував #{p.completion_order}
+                              ✓ {t('leaderboard.finished', { order: p.completion_order })}
                             </span>
                           )}
                         </p>
@@ -111,7 +117,7 @@ export default function Leaderboard() {
                         <p className="text-xs text-gray-400">
                           {p.total_score.toFixed(1)}
                           {p.bonus_score > 0 && (
-                            <span className="text-orange-500"> +{p.bonus_score.toFixed(0)} бонус</span>
+                            <span className="text-orange-500"> +{p.bonus_score.toFixed(0)} {t('leaderboard.bonus')}</span>
                           )}
                         </p>
                       </div>
@@ -126,12 +132,12 @@ export default function Leaderboard() {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-100">
-                <h2 className="font-bold text-gray-900">Лідери сегментів</h2>
-                <p className="text-xs text-gray-400 mt-0.5">Рейтингові сегменти в порядку</p>
+                <h2 className="font-bold text-gray-900">{t('leaderboard.segmentLeaders')}</h2>
+                <p className="text-xs text-gray-400 mt-0.5">{t('leaderboard.ratedInOrder')}</p>
               </div>
 
               {segmentLeaders.length === 0 ? (
-                <div className="px-5 py-8 text-center text-gray-400 text-sm">Немає даних</div>
+                <div className="px-5 py-8 text-center text-gray-400 text-sm">{t('leaderboard.noData')}</div>
               ) : (
                 <div className="divide-y divide-gray-50">
                   {segmentLeaders.map(seg => (
@@ -148,7 +154,7 @@ export default function Leaderboard() {
                           <span className="font-mono font-semibold text-gray-700">{fmtTime(seg.leader.elapsed_time)}</span>
                         </div>
                       ) : (
-                        <p className="text-xs text-gray-400">Ніхто ще не пройшов</p>
+                        <p className="text-xs text-gray-400">{t('leaderboard.noPassed')}</p>
                       )}
                     </div>
                   ))}

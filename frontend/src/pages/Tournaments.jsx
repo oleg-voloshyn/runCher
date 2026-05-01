@@ -1,26 +1,28 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import Layout from '../components/Layout'
 import TournamentCard from '../components/TournamentCard'
 import Spinner from '../components/Spinner'
 import { useApi } from '../hooks/useApi'
 import { api } from '../api/client'
 
-const FILTERS = [
-  { key: 'all',       label: 'Всі' },
-  { key: 'active',    label: 'Активні' },
-  { key: 'completed', label: 'Завершені' },
-]
-
 export default function Tournaments() {
+  const { t } = useTranslation()
   const { data: tournaments, loading, error } = useApi(() => api.getTournaments())
   const [filter, setFilter] = useState('all')
+
+  const FILTERS = [
+    { key: 'all',       label: t('tournaments.filterAll') },
+    { key: 'active',    label: t('tournaments.filterActive') },
+    { key: 'completed', label: t('tournaments.filterCompleted') },
+  ]
 
   const filtered = (tournaments || []).filter(t => filter === 'all' || t.status === filter)
 
   return (
     <Layout>
       <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
-        <h1 className="text-3xl font-black text-gray-900">Турніри</h1>
+        <h1 className="text-3xl font-black text-gray-900">{t('tournaments.title')}</h1>
 
         <div className="flex items-center bg-white border border-gray-200 rounded-xl p-1 gap-1">
           {FILTERS.map(({ key, label }) => (
@@ -50,12 +52,12 @@ export default function Tournaments() {
           {filtered.length === 0 ? (
             <div className="text-center py-20 text-gray-400">
               <p className="text-5xl mb-4">🏁</p>
-              <p className="text-lg font-medium">Немає турнірів</p>
-              <p className="text-sm mt-1">Перевірте пізніше або змініть фільтр</p>
+              <p className="text-lg font-medium">{t('tournaments.empty')}</p>
+              <p className="text-sm mt-1">{t('tournaments.emptyHint')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filtered.map(t => <TournamentCard key={t.id} tournament={t} />)}
+              {filtered.map(tournament => <TournamentCard key={tournament.id} tournament={tournament} />)}
             </div>
           )}
         </>

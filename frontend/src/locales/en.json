@@ -1,0 +1,96 @@
+{
+  "nav": {
+    "tournaments": "Tournaments",
+    "profile": "Profile",
+    "logout": "Log out",
+    "login": "Sign in"
+  },
+  "status": {
+    "draft": "Draft",
+    "active": "Active",
+    "completed": "Completed"
+  },
+  "home": {
+    "tagline": "Compete with friends on Strava segments. Find rated segments, earn points, be first.",
+    "viewTournaments": "View tournaments →",
+    "loginWithStrava": "Sign in with Strava",
+    "howItWorks": "How it works",
+    "step1Title": "Admin creates a tournament",
+    "step1Desc": "Selects 20 segments, 10 of which are rated — but you don't know which ones.",
+    "step2Title": "You run and record",
+    "step2Desc": "Record your workouts in Strava. We automatically check segment coverage.",
+    "step3Title": "Earn points",
+    "step3Desc": "Points = leader's time / your time × 100. The first to complete all rated segments gets a bonus.",
+    "scoringTitle": "Scoring formula",
+    "perSegment": "Per segment",
+    "genderSplit": "Separate for men and women",
+    "completionBonus": "Completion bonus",
+    "first10": "For the first 10 who complete all rated segments",
+    "place1": "🥇 1st place",
+    "place2": "🥈 2nd place",
+    "place3": "🥉 3rd place",
+    "participants": "participants",
+    "bonusPoints": "bonus points",
+    "readyToStart": "Ready to start?",
+    "loginCta": "Sign in with Strava and join tournaments",
+    "footer": "Cherkasy, Ukraine"
+  },
+  "tournaments": {
+    "title": "Tournaments",
+    "filterAll": "All",
+    "filterActive": "Active",
+    "filterCompleted": "Completed",
+    "empty": "No tournaments",
+    "emptyHint": "Check back later or change the filter"
+  },
+  "card": {
+    "segments": "segments",
+    "rated": "rated",
+    "joined": "You're a participant"
+  },
+  "detail": {
+    "backToAll": "← All tournaments",
+    "segments": "segments",
+    "rated": "rated",
+    "participants": "participants",
+    "syncStrava": "Sync Strava",
+    "syncing": "Syncing...",
+    "leaveTournament": "Leave tournament",
+    "joining": "Joining...",
+    "join": "Join",
+    "leaderboard": "🏆 Leaderboard",
+    "participantBanner": "You are participating in this tournament. Run the segments and sync your activities with Strava.",
+    "tournamentSegments": "Tournament segments",
+    "segmentsHidden": "Rated segments and their order are hidden until the leaderboard",
+    "noSegments": "No segments added yet",
+    "grade": "grade"
+  },
+  "leaderboard": {
+    "back": "← Back to tournament",
+    "title": "🏆 Leaderboard",
+    "all": "All",
+    "male": "♂ Men",
+    "female": "♀ Women",
+    "overall": "Overall standings",
+    "noResults": "No results yet",
+    "finished": "finished #{{order}}",
+    "bonus": "bonus",
+    "segmentLeaders": "Segment leaders",
+    "ratedInOrder": "Rated segments in order",
+    "noData": "No data",
+    "noPassed": "No one has completed this yet"
+  },
+  "profile": {
+    "stravaProfile": "Strava Profile",
+    "myTournaments": "My tournaments",
+    "notParticipating": "You are not participating in any tournaments yet",
+    "viewTournaments": "View available tournaments →",
+    "syncTitle": "Strava Sync",
+    "syncDesc": "Loads the last 30 activities and checks segment coverage",
+    "syncing": "Syncing...",
+    "sync": "Sync",
+    "segments": "segments",
+    "participants": "participants",
+    "leaderboard": "Leaderboard →"
+  }
+}

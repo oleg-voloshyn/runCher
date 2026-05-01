@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import Layout from '../components/Layout'
 import Spinner from '../components/Spinner'
 import { useAuth } from '../contexts/AuthContext'
@@ -7,13 +8,14 @@ import { useApi } from '../hooks/useApi'
 import { api } from '../api/client'
 
 const STATUS_COLORS = { draft: 'bg-gray-100 text-gray-600', active: 'bg-green-100 text-green-700', completed: 'bg-blue-100 text-blue-700' }
-const STATUS_LABELS = { draft: 'Чернетка', active: 'Активний', completed: 'Завершено' }
 
 export default function Profile() {
   const { user } = useAuth()
+  const { t, i18n } = useTranslation()
   const [syncing, setSyncing]   = useState(false)
   const [syncMsg, setSyncMsg]   = useState(null)
   const { data: tournaments, loading } = useApi(() => api.getTournaments())
+  const locale = i18n.language === 'uk' ? 'uk-UA' : 'en-GB'
 
   if (!user) return <Navigate to="/" replace />
 
@@ -55,22 +57,21 @@ export default function Profile() {
                 rel="noreferrer"
                 className="inline-flex items-center gap-1.5 mt-2 text-xs text-[#fc4c02] hover:underline"
               >
-                <StravaIcon /> Профіль Strava
+                <StravaIcon /> {t('profile.stravaProfile')}
               </a>
             </div>
-
           </div>
 
           {/* Sync card */}
           <div className="bg-white rounded-2xl border border-gray-200 p-5">
-            <h3 className="font-semibold text-gray-800 mb-1">Синхронізація Strava</h3>
-            <p className="text-xs text-gray-400 mb-4">Завантажить останні 30 активностей та перевірить покриття сегментів</p>
+            <h3 className="font-semibold text-gray-800 mb-1">{t('profile.syncTitle')}</h3>
+            <p className="text-xs text-gray-400 mb-4">{t('profile.syncDesc')}</p>
             <button
               onClick={handleSync}
               disabled={syncing}
               className="w-full flex items-center justify-center gap-2 bg-[#fc4c02] hover:bg-[#e04400] disabled:opacity-50 text-white font-semibold text-sm py-2.5 rounded-xl transition-colors"
             >
-              {syncing ? <Spinner className="h-4 w-4" /> : '🔄'} {syncing ? 'Синхронізація...' : 'Синхронізувати'}
+              {syncing ? <Spinner className="h-4 w-4" /> : '🔄'} {syncing ? t('profile.syncing') : t('profile.sync')}
             </button>
             {syncMsg && <p className="mt-3 text-xs text-center text-gray-500">{syncMsg}</p>}
           </div>
@@ -80,7 +81,7 @@ export default function Profile() {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-100">
-              <h2 className="font-bold text-gray-900">Мої турніри</h2>
+              <h2 className="font-bold text-gray-900">{t('profile.myTournaments')}</h2>
             </div>
 
             {loading ? (
@@ -88,34 +89,34 @@ export default function Profile() {
             ) : myTournaments.length === 0 ? (
               <div className="px-6 py-12 text-center text-gray-400">
                 <p className="text-4xl mb-3">🏁</p>
-                <p className="font-medium">Ви ще не беретe участь у турнірах</p>
+                <p className="font-medium">{t('profile.notParticipating')}</p>
                 <a href="/tournaments" className="mt-3 inline-block text-sm text-[#fc4c02] hover:underline">
-                  Переглянути доступні турніри →
+                  {t('profile.viewTournaments')}
                 </a>
               </div>
             ) : (
               <div className="divide-y divide-gray-50">
-                {myTournaments.map(t => (
-                  <div key={t.id} className="flex items-center justify-between px-6 py-4">
+                {myTournaments.map(tournament => (
+                  <div key={tournament.id} className="flex items-center justify-between px-6 py-4">
                     <div>
-                      <a href={`/tournaments/${t.id}`} className="font-semibold text-gray-900 hover:text-[#fc4c02] transition-colors">
-                        {t.name}
+                      <a href={`/tournaments/${tournament.id}`} className="font-semibold text-gray-900 hover:text-[#fc4c02] transition-colors">
+                        {tournament.name}
                       </a>
                       <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
-                        <span>{t.total_segments_count} сегментів</span>
-                        <span>👥 {t.participants_count}</span>
-                        {t.starts_at && <span>{new Date(t.starts_at).toLocaleDateString('uk-UA')}</span>}
+                        <span>{tournament.total_segments_count} {t('profile.segments')}</span>
+                        <span>👥 {tournament.participants_count}</span>
+                        {tournament.starts_at && <span>{new Date(tournament.starts_at).toLocaleDateString(locale)}</span>}
                       </div>
                     </div>
                     <div className="flex items-center gap-3 flex-shrink-0">
-                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${STATUS_COLORS[t.status]}`}>
-                        {STATUS_LABELS[t.status]}
+                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${STATUS_COLORS[tournament.status]}`}>
+                        {t(`status.${tournament.status}`)}
                       </span>
                       <a
-                        href={`/tournaments/${t.id}/leaderboard`}
+                        href={`/tournaments/${tournament.id}/leaderboard`}
                         className="text-xs text-[#fc4c02] hover:underline"
                       >
-                        Рейтинг →
+                        {t('profile.leaderboard')}
                       </a>
                     </div>
                   </div>

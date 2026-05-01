@@ -1,21 +1,23 @@
 import { useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import Layout from '../components/Layout'
 import Spinner from '../components/Spinner'
 import { useApi } from '../hooks/useApi'
 import { useAuth } from '../contexts/AuthContext'
 import { api } from '../api/client'
 
-const STATUS_LABELS = { draft: 'Чернетка', active: 'Активний', completed: 'Завершено' }
 const STATUS_COLORS = { draft: 'bg-gray-100 text-gray-600', active: 'bg-green-100 text-green-700', completed: 'bg-blue-100 text-blue-700' }
 
 export default function TournamentDetail() {
   const { id } = useParams()
   const { user } = useAuth()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { data: tournament, loading, error, setData } = useApi(() => api.getTournament(id), [id])
   const [joining, setJoining] = useState(false)
   const [syncing, setSyncing] = useState(false)
+  const locale = i18n.language === 'uk' ? 'uk-UA' : 'en-GB'
 
   async function handleJoin() {
     if (!user) return navigate('/login')
@@ -58,27 +60,27 @@ export default function TournamentDetail() {
   if (error)   return <Layout><div className="bg-red-50 border border-red-200 rounded-xl p-6 text-red-700">{error}</div></Layout>
   if (!tournament) return null
 
-  const { name, description, status, starts_at, ends_at, total_segments_count, rated_segments_count, participants_count, joined, segments = [] } = tournament
+  const { name, description, status, starts_at, total_segments_count, rated_segments_count, participants_count, joined, segments = [] } = tournament
 
   return (
     <Layout>
       {/* Header */}
       <div className="mb-8">
-        <Link to="/tournaments" className="text-sm text-gray-400 hover:text-gray-600 mb-4 inline-block">← Всі турніри</Link>
+        <Link to="/tournaments" className="text-sm text-gray-400 hover:text-gray-600 mb-4 inline-block">{t('detail.backToAll')}</Link>
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-3xl font-black text-gray-900">{name}</h1>
               <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${STATUS_COLORS[status]}`}>
-                {STATUS_LABELS[status]}
+                {t(`status.${status}`)}
               </span>
             </div>
             {description && <p className="text-gray-500">{description}</p>}
             <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
-              <span>📍 {total_segments_count} сегментів</span>
-              <span>🏆 {rated_segments_count} рейтингових</span>
-              <span>👥 {participants_count} учасників</span>
-              {starts_at && <span>📅 {new Date(starts_at).toLocaleDateString('uk-UA')}</span>}
+              <span>📍 {total_segments_count} {t('detail.segments')}</span>
+              <span>🏆 {rated_segments_count} {t('detail.rated')}</span>
+              <span>👥 {participants_count} {t('detail.participants')}</span>
+              {starts_at && <span>📅 {new Date(starts_at).toLocaleDateString(locale)}</span>}
             </div>
           </div>
 
@@ -92,14 +94,14 @@ export default function TournamentDetail() {
                       disabled={syncing}
                       className="flex items-center gap-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium px-4 py-2 rounded-xl transition-colors disabled:opacity-50"
                     >
-                      {syncing ? <Spinner className="h-4 w-4" /> : '🔄'} Синхронізувати Strava
+                      {syncing ? <Spinner className="h-4 w-4" /> : '🔄'} {t('detail.syncStrava')}
                     </button>
                     <button
                       onClick={handleLeave}
                       disabled={joining}
                       className="text-sm text-red-500 hover:text-red-700 border border-red-200 px-4 py-2 rounded-xl transition-colors"
                     >
-                      Вийти з турніру
+                      {t('detail.leaveTournament')}
                     </button>
                   </>
                 ) : (
@@ -108,7 +110,7 @@ export default function TournamentDetail() {
                     disabled={joining}
                     className="bg-[#fc4c02] hover:bg-[#e04400] text-white font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors disabled:opacity-50"
                   >
-                    {joining ? 'Приєднання...' : 'Приєднатися'}
+                    {joining ? t('detail.joining') : t('detail.join')}
                   </button>
                 )}
               </>
@@ -118,7 +120,7 @@ export default function TournamentDetail() {
               to={`/tournaments/${id}/leaderboard`}
               className="border border-[#fc4c02] text-[#fc4c02] hover:bg-orange-50 font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
             >
-              🏆 Рейтинг
+              {t('detail.leaderboard')}
             </Link>
           </div>
         </div>
@@ -127,19 +129,19 @@ export default function TournamentDetail() {
       {/* Joined banner */}
       {joined && status === 'active' && (
         <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-3 mb-6 text-sm text-green-800 font-medium flex items-center gap-2">
-          ✅ Ви берете участь у цьому турнірі. Бігайте по сегментах і синхронізуйте активності зі Strava.
+          ✅ {t('detail.participantBanner')}
         </div>
       )}
 
       {/* Segments */}
       <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-100">
-          <h2 className="font-bold text-gray-900">Сегменти турніру</h2>
-          <p className="text-xs text-gray-400 mt-0.5">Рейтингові сегменти та їх порядок — прихований до рейтингу</p>
+          <h2 className="font-bold text-gray-900">{t('detail.tournamentSegments')}</h2>
+          <p className="text-xs text-gray-400 mt-0.5">{t('detail.segmentsHidden')}</p>
         </div>
 
         {segments.length === 0 ? (
-          <div className="px-6 py-10 text-center text-gray-400 text-sm">Сегменти ще не додані</div>
+          <div className="px-6 py-10 text-center text-gray-400 text-sm">{t('detail.noSegments')}</div>
         ) : (
           <div className="divide-y divide-gray-50">
             {segments.map((seg, i) => (
@@ -152,17 +154,16 @@ export default function TournamentDetail() {
                     <p className="font-medium text-gray-900">{seg.name}</p>
                     <p className="text-xs text-gray-400 mt-0.5">
                       {seg.distance ? `${(seg.distance / 1000).toFixed(2)} km` : ''}
-                      {seg.average_grade ? ` · ${seg.average_grade}% ухил` : ''}
+                      {seg.average_grade ? ` · ${seg.average_grade}% ${t('detail.grade')}` : ''}
                     </p>
                   </div>
                 </div>
 
-                {/* is_rated / order_number only visible to moderators */}
                 {seg.is_rated !== undefined && (
                   <div className="flex items-center gap-2">
                     {seg.is_rated ? (
                       <span className="text-xs bg-orange-100 text-orange-700 font-semibold px-2.5 py-1 rounded-full">
-                        #{seg.order_number} рейтинг.
+                        #{seg.order_number} {t('detail.rated')}
                       </span>
                     ) : (
                       <span className="text-xs text-gray-300">—</span>

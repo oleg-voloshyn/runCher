@@ -1,8 +1,16 @@
 import { Link, NavLink } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function Navbar() {
   const { user } = useAuth()
+  const { t, i18n } = useTranslation()
+
+  function toggleLanguage() {
+    const next = i18n.language === 'uk' ? 'en' : 'uk'
+    i18n.changeLanguage(next)
+    localStorage.setItem('lang', next)
+  }
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
@@ -19,7 +27,7 @@ export default function Navbar() {
               `px-4 py-2 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-orange-50 text-[#fc4c02]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'}`
             }
           >
-            Турніри
+            {t('nav.tournaments')}
           </NavLink>
           {user && (
             <NavLink
@@ -28,7 +36,7 @@ export default function Navbar() {
                 `px-4 py-2 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-orange-50 text-[#fc4c02]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'}`
               }
             >
-              Профіль
+              {t('nav.profile')}
             </NavLink>
           )}
           {(user?.role === 'admin' || user?.role === 'moderator') && (
@@ -42,6 +50,13 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={toggleLanguage}
+            className="text-xs font-semibold text-gray-400 hover:text-gray-700 border border-gray-200 rounded-md px-2 py-1 transition-colors"
+          >
+            {i18n.language === 'uk' ? 'EN' : 'UA'}
+          </button>
+
           {user ? (
             <div className="flex items-center gap-3">
               {user.profile_picture && (
@@ -58,7 +73,7 @@ export default function Navbar() {
                 }}
                 className="text-sm text-gray-500 hover:text-gray-800 transition-colors"
               >
-                Вийти
+                {t('nav.logout')}
               </a>
             </div>
           ) : (
@@ -67,7 +82,7 @@ export default function Navbar() {
               className="flex items-center gap-2 bg-[#fc4c02] hover:bg-[#e04400] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
             >
               <StravaIcon />
-              Увійти
+              {t('nav.login')}
             </a>
           )}
         </div>

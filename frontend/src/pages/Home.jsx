@@ -1,9 +1,23 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
 import { stravaLoginUrl } from '../api/client'
 
 export default function Home() {
   const { user } = useAuth()
+  const { t } = useTranslation()
+
+  const steps = [
+    { step: '01', icon: '🗺️', title: t('home.step1Title'), desc: t('home.step1Desc') },
+    { step: '02', icon: '🏃', title: t('home.step2Title'), desc: t('home.step2Desc') },
+    { step: '03', icon: '🏆', title: t('home.step3Title'), desc: t('home.step3Desc') },
+  ]
+
+  const places = [
+    { place: t('home.place1'), formula: 'N × 10', ex: `20 ${t('home.participants')} = 200 ${t('home.bonusPoints')}` },
+    { place: t('home.place2'), formula: 'N × 9',  ex: `20 ${t('home.participants')} = 180 ${t('home.bonusPoints')}` },
+    { place: t('home.place3'), formula: 'N × 8',  ex: `20 ${t('home.participants')} = 160 ${t('home.bonusPoints')}` },
+  ]
 
   return (
     <div className="min-h-screen bg-white">
@@ -25,7 +39,7 @@ export default function Home() {
           </h1>
 
           <p className="text-xl sm:text-2xl text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Змагайся з друзями на сегментах Strava. Знаходь рейтингові сегменти, набирай бали, ставай першим.
+            {t('home.tagline')}
           </p>
 
           {user ? (
@@ -33,7 +47,7 @@ export default function Home() {
               to="/tournaments"
               className="inline-flex items-center gap-2 bg-[#fc4c02] hover:bg-[#e04400] text-white font-bold text-lg px-8 py-4 rounded-2xl transition-colors shadow-lg shadow-orange-900/30"
             >
-              Дивитись турніри →
+              {t('home.viewTournaments')}
             </Link>
           ) : (
             <a
@@ -41,7 +55,7 @@ export default function Home() {
               className="inline-flex items-center gap-3 bg-[#fc4c02] hover:bg-[#e04400] text-white font-bold text-lg px-8 py-4 rounded-2xl transition-colors shadow-lg shadow-orange-900/30"
             >
               <StravaIcon size={24} />
-              Увійти через Strava
+              {t('home.loginWithStrava')}
             </a>
           )}
         </div>
@@ -49,13 +63,9 @@ export default function Home() {
 
       {/* How it works */}
       <section className="max-w-6xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-black text-gray-900 text-center mb-14">Як це працює</h2>
+        <h2 className="text-3xl font-black text-gray-900 text-center mb-14">{t('home.howItWorks')}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-          {[
-            { step: '01', icon: '🗺️', title: 'Адмін створює турнір', desc: 'Обирає 20 сегментів, 10 з яких рейтингові — але ти не знаєш які.' },
-            { step: '02', icon: '🏃', title: 'Ти бігаєш і записуєш', desc: 'Записуй тренування в Strava. Ми автоматично перевіряємо покриття сегментів.' },
-            { step: '03', icon: '🏆', title: 'Набирай бали', desc: 'Бали = час лідера / твій час × 100. Перший хто пройде всі рейтингові сегменти — отримує бонус.' },
-          ].map(({ step, icon, title, desc }) => (
+          {steps.map(({ step, icon, title, desc }) => (
             <div key={step} className="relative">
               <div className="text-6xl font-black text-gray-100 absolute -top-4 -left-2 select-none">{step}</div>
               <div className="relative bg-white rounded-2xl border border-gray-200 p-6">
@@ -71,30 +81,26 @@ export default function Home() {
       {/* Scoring */}
       <section className="bg-slate-900 text-white">
         <div className="max-w-6xl mx-auto px-6 py-20">
-          <h2 className="text-3xl font-black text-center mb-14">Формула балів</h2>
+          <h2 className="text-3xl font-black text-center mb-14">{t('home.scoringTitle')}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-center">
             <div>
               <div className="bg-slate-800 rounded-2xl p-8 text-center mb-6">
-                <p className="text-slate-400 text-sm mb-3">За кожен сегмент</p>
+                <p className="text-slate-400 text-sm mb-3">{t('home.perSegment')}</p>
                 <p className="text-3xl font-mono font-bold text-[#fc4c02]">
-                  (T<sub>лідер</sub> / T<sub>твій</sub>) × 100
+                  (T<sub>leader</sub> / T<sub>you</sub>) × 100
                 </p>
-                <p className="text-slate-400 text-sm mt-3">Окремо для чоловіків і жінок</p>
+                <p className="text-slate-400 text-sm mt-3">{t('home.genderSplit')}</p>
               </div>
               <div className="bg-slate-800 rounded-2xl p-8 text-center">
-                <p className="text-slate-400 text-sm mb-3">Бонус за завершення</p>
+                <p className="text-slate-400 text-sm mb-3">{t('home.completionBonus')}</p>
                 <p className="text-3xl font-mono font-bold text-green-400">
-                  N × (11 − місце)
+                  N × (11 − place)
                 </p>
-                <p className="text-slate-400 text-sm mt-3">Для перших 10 хто пройшов усі рейтингові сегменти</p>
+                <p className="text-slate-400 text-sm mt-3">{t('home.first10')}</p>
               </div>
             </div>
             <div className="space-y-4">
-              {[
-                { place: '🥇 1 місце', formula: 'N × 10 балів', ex: '20 учасників = 200 бонусних балів' },
-                { place: '🥈 2 місце', formula: 'N × 9 балів',  ex: '20 учасників = 180 бонусних балів' },
-                { place: '🥉 3 місце', formula: 'N × 8 балів',  ex: '20 учасників = 160 бонусних балів' },
-              ].map(({ place, formula, ex }) => (
+              {places.map(({ place, formula, ex }) => (
                 <div key={place} className="bg-slate-800 rounded-xl p-4 flex items-center justify-between">
                   <div>
                     <p className="font-semibold">{place}</p>
@@ -111,20 +117,20 @@ export default function Home() {
       {/* CTA */}
       {!user && (
         <section className="max-w-6xl mx-auto px-6 py-20 text-center">
-          <h2 className="text-3xl font-black text-gray-900 mb-4">Готовий до старту?</h2>
-          <p className="text-gray-500 mb-8">Увійди через Strava і приєднуйся до турнірів</p>
+          <h2 className="text-3xl font-black text-gray-900 mb-4">{t('home.readyToStart')}</h2>
+          <p className="text-gray-500 mb-8">{t('home.loginCta')}</p>
           <a
             href={stravaLoginUrl()}
             className="inline-flex items-center gap-3 bg-[#fc4c02] hover:bg-[#e04400] text-white font-bold text-lg px-8 py-4 rounded-2xl transition-colors"
           >
             <StravaIcon size={22} />
-            Увійти через Strava
+            {t('home.loginWithStrava')}
           </a>
         </section>
       )}
 
       <footer className="border-t border-gray-100 py-8 text-center text-sm text-gray-400">
-        RunCher © {new Date().getFullYear()} · Черкаси, Україна
+        RunCher © {new Date().getFullYear()} · {t('home.footer')}
       </footer>
     </div>
   )
