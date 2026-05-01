@@ -1,0 +1,180 @@
+<% content_for :page_title, @tournament.name %>
+
+<div class="flex items-start gap-3 mb-6 flex-wrap">
+  <%= status_badge(@tournament.status) %>
+  <% if @tournament.status == 'draft' %>
+    <%= button_to "▶ Активувати", activate_admin_tournament_path(@tournament),
+        method: :post, class: "bg-green-500 hover:bg-green-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors" %>
+  <% elsif @tournament.status == 'active' %>
+    <%= button_to "✓ Завершити", complete_admin_tournament_path(@tournament),
+        method: :post, class: "bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors",
+        data: { turbo_confirm: "Завершити турнір та перерахувати бали?" } %>
+  <% end %>
+  <%= link_to "Редагувати", edit_admin_tournament_path(@tournament), class: "text-xs text-gray-500 hover:text-gray-800 border border-gray-300 rounded-lg px-3 py-1.5" %>
+  <%= button_to "Видалити", admin_tournament_path(@tournament), method: :delete,
+      class: "text-xs text-red-500 hover:text-red-700 border border-red-200 rounded-lg px-3 py-1.5",
+      data: { turbo_confirm: "Видалити турнір «#{@tournament.name}»?" } %>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+  <%# Info card %>
+  <div class="lg:col-span-1 space-y-4">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+      <h2 class="font-semibold text-gray-800 mb-4">Інформація</h2>
+      <dl class="space-y-3 text-sm">
+        <% if @tournament.description.present? %>
+          <div>
+            <dt class="text-gray-500">Опис</dt>
+            <dd class="text-gray-900 mt-0.5"><%= @tournament.description %></dd>
+          </div>
+        <% end %>
+        <div>
+          <dt class="text-gray-500">Сегменти</dt>
+          <dd class="text-gray-900 mt-0.5">
+            <%= @tournament_segments.size %> / <%= @tournament.total_segments_count %> всього<br>
+            <span class="text-orange-600"><%= @tournament_segments.count(&:is_rated) %> / <%= @tournament.rated_segments_count %> рейтингових</span>
+          </dd>
+        </div>
+        <% if @tournament.starts_at %>
+          <div>
+            <dt class="text-gray-500">Початок</dt>
+            <dd class="text-gray-900 mt-0.5"><%= @tournament.starts_at.strftime('%d.%m.%Y %H:%M') %></dd>
+          </div>
+        <% end %>
+        <% if @tournament.ends_at %>
+          <div>
+            <dt class="text-gray-500">Кінець</dt>
+            <dd class="text-gray-900 mt-0.5"><%= @tournament.ends_at.strftime('%d.%m.%Y %H:%M') %></dd>
+          </div>
+        <% end %>
+        <div>
+          <dt class="text-gray-500">Учасники</dt>
+          <dd class="text-gray-900 mt-0.5"><%= @participants.size %></dd>
+        </div>
+      </dl>
+    </div>
+
+    <%# Add segment form %>
+    <% if @tournament.status != 'completed' %>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+        <h2 class="font-semibold text-gray-800 mb-4">Додати сегмент</h2>
+        <%= form_with url: admin_tournament_tournament_segments_path(@tournament), method: :post, class: "space-y-3" do |f| %>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Сегмент</label>
+            <%= select_tag 'tournament_segment[segment_id]',
+                options_from_collection_for_select(Segment.order(:name), :id, :name),
+                prompt: 'Оберіть сегмент...',
+                class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" %>
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+              <%= check_box_tag 'tournament_segment[is_rated]', '1', false, class: "rounded text-orange-500" %>
+              Рейтинговий
+            </label>
+            <div class="flex-1">
+              <%= number_field_tag 'tournament_segment[order_number]', nil, min: 1,
+                  placeholder: "Порядок",
+                  class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" %>
+            </div>
+          </div>
+          <%= f.submit "Додати", class: "w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium py-2 rounded-lg cursor-pointer transition-colors" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <%# Segments table %>
+  <div class="lg:col-span-2 space-y-4">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+        <h2 class="font-semibold text-gray-800">Сегменти турніру (<%= @tournament_segments.size %>)</h2>
+      </div>
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-100 text-left">
+            <th class="px-6 py-3 font-semibold text-gray-600">Назва</th>
+            <th class="px-6 py-3 font-semibold text-gray-600">Дистанція</th>
+            <th class="px-6 py-3 font-semibold text-gray-600 text-center">Рейтинг.</th>
+            <th class="px-6 py-3 font-semibold text-gray-600 text-center">Порядок</th>
+            <th class="px-6 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-50">
+          <% @tournament_segments.each do |ts| %>
+            <tr class="<%= ts.is_rated ? 'bg-orange-50/40' : '' %>">
+              <td class="px-6 py-3 font-medium text-gray-900"><%= ts.segment.name %></td>
+              <td class="px-6 py-3 text-gray-500"><%= "%.1f km" % (ts.segment.distance / 1000) %></td>
+              <td class="px-6 py-3 text-center">
+                <% if ts.is_rated %>
+                  <span class="inline-block w-5 h-5 bg-orange-500 rounded-full text-white text-xs flex items-center justify-center">✓</span>
+                <% else %>
+                  <span class="text-gray-300">—</span>
+                <% end %>
+              </td>
+              <td class="px-6 py-3 text-center text-gray-700 font-semibold">
+                <%= ts.order_number || '—' %>
+              </td>
+              <td class="px-6 py-3 text-right">
+                <% if @tournament.status != 'completed' %>
+                  <%= button_to "✕", admin_tournament_tournament_segment_path(@tournament, ts),
+                      method: :delete,
+                      class: "text-xs text-red-400 hover:text-red-600 transition-colors",
+                      data: { turbo_confirm: "Видалити сегмент?" } %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @tournament_segments.empty? %>
+            <tr><td colspan="5" class="px-6 py-6 text-center text-gray-400 text-sm">Сегменти ще не додані</td></tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <%# Participants table %>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-100">
+        <h2 class="font-semibold text-gray-800">Учасники (<%= @participants.size %>)</h2>
+      </div>
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-100 text-left">
+            <th class="px-6 py-3 font-semibold text-gray-600">Учасник</th>
+            <th class="px-6 py-3 font-semibold text-gray-600">Стать</th>
+            <th class="px-6 py-3 font-semibold text-gray-600 text-right">Бали</th>
+            <th class="px-6 py-3 font-semibold text-gray-600 text-right">Бонус</th>
+            <th class="px-6 py-3 font-semibold text-gray-600 text-center">Місце</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-50">
+          <% @participants.each do |p| %>
+            <tr>
+              <td class="px-6 py-3">
+                <div class="flex items-center gap-2">
+                  <% if p.user.profile_picture.present? %>
+                    <%= image_tag p.user.profile_picture, class: "w-6 h-6 rounded-full object-cover" %>
+                  <% end %>
+                  <%= link_to p.user.full_name, admin_user_path(p.user), class: "font-medium text-gray-900 hover:text-orange-500" %>
+                </div>
+              </td>
+              <td class="px-6 py-3 text-gray-500"><%= gender_label(p.gender) %></td>
+              <td class="px-6 py-3 text-right text-gray-900"><%= p.total_score.to_f.round(1) %></td>
+              <td class="px-6 py-3 text-right text-orange-600"><%= p.bonus_score.to_f.round(1) %></td>
+              <td class="px-6 py-3 text-center">
+                <% if p.completion_order.present? %>
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-orange-100 text-orange-700 text-xs font-bold"><%= p.completion_order %></span>
+                <% else %>
+                  <span class="text-gray-300">—</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @participants.empty? %>
+            <tr><td colspan="5" class="px-6 py-6 text-center text-gray-400 text-sm">Немає учасників</td></tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

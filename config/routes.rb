@@ -6,8 +6,21 @@ Rails.application.routes.draw do
   get  '/auth/strava/callback', to: 'sessions#create'
   delete '/logout',             to: 'sessions#destroy'
 
-  # Legacy admin views (Hotwire)
-  resources :segments, only: [:new, :create, :index]
+  # Admin panel (Hotwire / Turbo)
+  namespace :admin do
+    root to: 'dashboard#index', as: :dashboard
+    resources :tournaments do
+      member do
+        post :activate
+        post :complete
+      end
+      resources :tournament_segments, only: [:create, :destroy], path: :segments
+    end
+    resources :segments, only: [:index, :show, :new, :create, :destroy]
+    resources :users,    only: [:index, :show] do
+      member { patch :update_role }
+    end
+  end
 
   # REST API v1
   namespace :api do

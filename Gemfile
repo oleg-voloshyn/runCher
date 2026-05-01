@@ -13,6 +13,9 @@ gem "pg", "~> 1.1"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
+
+# Tailwind CSS
+gem "tailwindcss-rails"
 gem 'strava-ruby-client'
 gem 'dotenv-rails', groups: [:development, :test]
 

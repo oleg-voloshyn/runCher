@@ -1,33 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="uk">
   <head>
-    <title>StravaApp</title>
+    <title>RunCher</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-gray-100 text-gray-900">
-    <nav class="bg-blue-600 p-4 text-white">
-      <h1 class="text-xl font-bold">Strava App</h1>
-    </nav>
+  <body class="bg-gray-50 text-gray-900 antialiased">
+    <% if flash[:notice] %>
+      <div class="fixed top-4 right-4 z-50 bg-green-500 text-white px-5 py-3 rounded-lg shadow-lg text-sm font-medium">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+    <% if flash[:alert] %>
+      <div class="fixed top-4 right-4 z-50 bg-red-500 text-white px-5 py-3 rounded-lg shadow-lg text-sm font-medium">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
 
-    <main class="container mx-auto p-6">
-      <% if current_user %>
-        <p>Welcome, <%= current_user.first_name %>!</p>
-        <%= image_tag current_user.profile_picture, width: 50 if current_user.profile_picture %>
-        <%= link_to "Logout", logout_path, method: :delete %>
-      <% else %>
-        <a href="https://www.strava.com/oauth/authorize?client_id=<%= ENV['STRAVA_CLIENT_ID'] %>&response_type=code&redirect_uri=<%= CGI.escape(auth_strava_callback_url) %>&scope=read,profile:read_all,activity:read">
-          Login with Strava
-        </a>
-      <% end %>
-
-      <nav class="bg-gray-800 text-white p-4">
-        <%= link_to "Segments", segments_path, class: "mr-4 hover:underline" %>
-      </nav>
-      <%= yield %>
-    </main>
+    <%= yield %>
   </body>
 </html>

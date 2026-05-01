@@ -1,0 +1,24 @@
+<% content_for :page_title, "Додати сегмент зі Strava" %>
+
+<div class="max-w-lg">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <p class="text-sm text-gray-500 mb-5">
+      Знайдіть сегмент на <a href="https://www.strava.com/segments/explore" target="_blank" class="text-orange-500 hover:underline">Strava Segment Explorer</a>,
+      скопіюйте його ID з URL (наприклад <code class="bg-gray-100 px-1 rounded text-xs">strava.com/segments/<strong>12345678</strong></code>) і вставте нижче.
+    </p>
+
+    <%= form_with url: admin_segments_path, method: :post do |f| %>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Strava Segment ID</label>
+          <%= f.text_field :segment, :strava_id, placeholder: "12345678",
+              class: "w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 font-mono" %>
+        </div>
+        <div class="flex items-center gap-3">
+          <%= f.submit "Отримати та зберегти", class: "bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-5 py-2.5 rounded-lg cursor-pointer transition-colors" %>
+          <%= link_to "Скасувати", admin_segments_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
