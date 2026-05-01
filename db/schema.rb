@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_01_124903) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_01_180726) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -130,12 +130,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_124903) do
     t.string "first_name"
     t.string "gender", default: "male"
     t.string "last_name"
+    t.string "mobile_token"
     t.string "profile_picture"
     t.string "refresh_token"
     t.string "role", default: "user"
     t.string "strava_id"
     t.datetime "token_expires_at"
     t.datetime "updated_at", null: false
+    t.index ["mobile_token"], name: "index_users_on_mobile_token", unique: true
     t.index ["strava_id"], name: "index_users_on_strava_id", unique: true
   end
 

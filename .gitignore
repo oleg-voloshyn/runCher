@@ -47,3 +47,12 @@
 
 # Root node_modules (from yarn/npm tailwind setup)
 /node_modules/
+
+# Expo mobile app
+/mobile/node_modules/
+/mobile/.expo/
+/mobile/dist/
+/mobile/.env
+/mobile/.env.local
+/mobile/android/
+/mobile/ios/

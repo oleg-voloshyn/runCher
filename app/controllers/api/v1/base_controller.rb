@@ -6,7 +6,14 @@ module Api
       private
 
       def current_user
-        @current_user ||= User.find_by(id: session[:user_id])
+        @current_user ||= begin
+          bearer = request.headers['Authorization']&.then { |h| h.start_with?('Bearer ') ? h.delete_prefix('Bearer ') : nil }
+          if bearer
+            User.find_by(mobile_token: bearer)
+          else
+            User.find_by(id: session[:user_id])
+          end
+        end
       end
 
       def authenticate_user!

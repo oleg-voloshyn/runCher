@@ -1,3 +1,4 @@
 web: bin/rails server
 css: bin/rails tailwindcss:watch
 react: npm run dev --prefix frontend
+mobile: npx expo start --android --prefix mobile

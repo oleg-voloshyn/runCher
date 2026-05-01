@@ -20,10 +20,15 @@ class SessionsController < ApplicationController
     user.token_expires_at = Time.at(response.expires_at)
     user.save!
 
-    session[:user_id] = user.id
-
-    frontend_url = ENV.fetch('FRONTEND_URL', 'http://localhost:5173')
-    redirect_to frontend_url, allow_other_host: true
+    if params[:state] == 'mobile'
+      token = SecureRandom.hex(32)
+      user.update!(mobile_token: token)
+      redirect_to "runcher://auth?token=#{token}", allow_other_host: true
+    else
+      session[:user_id] = user.id
+      frontend_url = ENV.fetch('FRONTEND_URL', 'http://localhost:5173')
+      redirect_to frontend_url, allow_other_host: true
+    end
   end
 
   def destroy

@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "RunCher",
+    "slug": "runcher",
+    "scheme": "runcher",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "platforms": ["android"],
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#fc4c02"
+      },
+      "package": "com.runcher.app",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [{ "scheme": "runcher" }],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
