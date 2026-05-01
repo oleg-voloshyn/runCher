@@ -31,3 +31,7 @@ services:
         sync: false
       - key: FRONTEND_URL
         sync: false          # set to https://<your-app>.onrender.com after first deploy
+      - key: VITE_STRAVA_CLIENT_ID
+        value: "49283"
+      - key: VITE_STRAVA_REDIRECT_URI
+        sync: false          # set to https://<your-app>.onrender.com/auth/strava/callback
