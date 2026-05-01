@@ -23,11 +23,13 @@ class SessionsController < ApplicationController
 
     session[:user_id] = user.id
 
-    redirect_to root_path, notice: "Logged in as #{user.first_name} #{user.last_name}"
+    frontend_url = ENV.fetch('FRONTEND_URL', 'http://localhost:5173')
+    redirect_to frontend_url, allow_other_host: true
   end
 
   def destroy
     session[:user_id] = nil
-    redirect_to root_path, notice: "Logged out successfully"
+    frontend_url = ENV.fetch('FRONTEND_URL', 'http://localhost:5173')
+    redirect_to frontend_url, allow_other_host: true
   end
 end
