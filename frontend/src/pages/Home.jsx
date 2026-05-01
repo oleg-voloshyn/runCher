@@ -14,14 +14,25 @@ export default function Home() {
   ]
 
   const places = [
-    { place: t('home.place1'), formula: 'N × 10', ex: `20 ${t('home.participants')} = 200 ${t('home.bonusPoints')}` },
-    { place: t('home.place2'), formula: 'N × 9',  ex: `20 ${t('home.participants')} = 180 ${t('home.bonusPoints')}` },
-    { place: t('home.place3'), formula: 'N × 8',  ex: `20 ${t('home.participants')} = 160 ${t('home.bonusPoints')}` },
+    {
+      place: t('home.place1'),
+      formula: 'N × 10',
+      ex: `20 ${t('home.participants')} = 200 ${t('home.bonusPoints')}`,
+    },
+    {
+      place: t('home.place2'),
+      formula: 'N × 9',
+      ex: `20 ${t('home.participants')} = 180 ${t('home.bonusPoints')}`,
+    },
+    {
+      place: t('home.place3'),
+      formula: 'N × 8',
+      ex: `20 ${t('home.participants')} = 160 ${t('home.bonusPoints')}`,
+    },
   ]
 
   return (
     <div className="min-h-screen bg-white">
-
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
         <div className="absolute inset-0 opacity-10">
@@ -63,11 +74,15 @@ export default function Home() {
 
       {/* How it works */}
       <section className="max-w-6xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-black text-gray-900 text-center mb-14">{t('home.howItWorks')}</h2>
+        <h2 className="text-3xl font-black text-gray-900 text-center mb-14">
+          {t('home.howItWorks')}
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
           {steps.map(({ step, icon, title, desc }) => (
             <div key={step} className="relative">
-              <div className="text-6xl font-black text-gray-100 absolute -top-4 -left-2 select-none">{step}</div>
+              <div className="text-6xl font-black text-gray-100 absolute -top-4 -left-2 select-none">
+                {step}
+              </div>
               <div className="relative bg-white rounded-2xl border border-gray-200 p-6">
                 <div className="text-3xl mb-3">{icon}</div>
                 <h3 className="font-bold text-gray-900 text-lg mb-2">{title}</h3>
@@ -93,15 +108,16 @@ export default function Home() {
               </div>
               <div className="bg-slate-800 rounded-2xl p-8 text-center">
                 <p className="text-slate-400 text-sm mb-3">{t('home.completionBonus')}</p>
-                <p className="text-3xl font-mono font-bold text-green-400">
-                  N × (11 − place)
-                </p>
+                <p className="text-3xl font-mono font-bold text-green-400">N × (11 − place)</p>
                 <p className="text-slate-400 text-sm mt-3">{t('home.first10')}</p>
               </div>
             </div>
             <div className="space-y-4">
               {places.map(({ place, formula, ex }) => (
-                <div key={place} className="bg-slate-800 rounded-xl p-4 flex items-center justify-between">
+                <div
+                  key={place}
+                  className="bg-slate-800 rounded-xl p-4 flex items-center justify-between"
+                >
                   <div>
                     <p className="font-semibold">{place}</p>
                     <p className="text-slate-400 text-xs mt-0.5">{ex}</p>
@@ -139,8 +155,8 @@ export default function Home() {
 function StravaIcon({ size = 20 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066z"/>
-      <path d="M11.374 14.105l2.197-4.35-2.197-4.332L9.178 9.755z"/>
+      <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066z" />
+      <path d="M11.374 14.105l2.197-4.35-2.197-4.332L9.178 9.755z" />
     </svg>
   )
 }

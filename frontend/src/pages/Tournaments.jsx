@@ -12,12 +12,12 @@ export default function Tournaments() {
   const [filter, setFilter] = useState('all')
 
   const FILTERS = [
-    { key: 'all',       label: t('tournaments.filterAll') },
-    { key: 'active',    label: t('tournaments.filterActive') },
+    { key: 'all', label: t('tournaments.filterAll') },
+    { key: 'active', label: t('tournaments.filterActive') },
     { key: 'completed', label: t('tournaments.filterCompleted') },
   ]
 
-  const filtered = (tournaments || []).filter(t => filter === 'all' || t.status === filter)
+  const filtered = (tournaments || []).filter((t) => filter === 'all' || t.status === filter)
 
   return (
     <Layout>
@@ -40,11 +40,15 @@ export default function Tournaments() {
       </div>
 
       {loading && (
-        <div className="flex justify-center py-20"><Spinner /></div>
+        <div className="flex justify-center py-20">
+          <Spinner />
+        </div>
       )}
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-red-700 text-sm">{error}</div>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-red-700 text-sm">
+          {error}
+        </div>
       )}
 
       {!loading && !error && (
@@ -57,7 +61,9 @@ export default function Tournaments() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filtered.map(tournament => <TournamentCard key={tournament.id} tournament={tournament} />)}
+              {filtered.map((tournament) => (
+                <TournamentCard key={tournament.id} tournament={tournament} />
+              ))}
             </div>
           )}
         </>

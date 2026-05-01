@@ -7,19 +7,23 @@ import { useAuth } from '../contexts/AuthContext'
 import { useApi } from '../hooks/useApi'
 import { api } from '../api/client'
 
-const STATUS_COLORS = { draft: 'bg-gray-100 text-gray-600', active: 'bg-green-100 text-green-700', completed: 'bg-blue-100 text-blue-700' }
+const STATUS_COLORS = {
+  draft: 'bg-gray-100 text-gray-600',
+  active: 'bg-green-100 text-green-700',
+  completed: 'bg-blue-100 text-blue-700',
+}
 
 export default function Profile() {
   const { user } = useAuth()
   const { t, i18n } = useTranslation()
-  const [syncing, setSyncing]   = useState(false)
-  const [syncMsg, setSyncMsg]   = useState(null)
+  const [syncing, setSyncing] = useState(false)
+  const [syncMsg, setSyncMsg] = useState(null)
   const { data: tournaments, loading } = useApi(() => api.getTournaments())
   const locale = i18n.language === 'uk' ? 'uk-UA' : 'en-GB'
 
   if (!user) return <Navigate to="/" replace />
 
-  const myTournaments = (tournaments || []).filter(t => t.joined)
+  const myTournaments = (tournaments || []).filter((t) => t.joined)
 
   async function handleSync() {
     setSyncing(true)
@@ -37,13 +41,16 @@ export default function Profile() {
   return (
     <Layout>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
         {/* Profile card */}
         <div className="lg:col-span-1 space-y-4">
           <div className="bg-white rounded-2xl border border-gray-200 p-6">
             <div className="flex flex-col items-center text-center mb-6">
               {user.profile_picture ? (
-                <img src={user.profile_picture} alt={user.full_name} className="w-24 h-24 rounded-full object-cover mb-4 ring-4 ring-orange-100" />
+                <img
+                  src={user.profile_picture}
+                  alt={user.full_name}
+                  className="w-24 h-24 rounded-full object-cover mb-4 ring-4 ring-orange-100"
+                />
               ) : (
                 <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-3xl font-bold mb-4">
                   {user.first_name?.[0]}
@@ -71,7 +78,8 @@ export default function Profile() {
               disabled={syncing}
               className="w-full flex items-center justify-center gap-2 bg-[#fc4c02] hover:bg-[#e04400] disabled:opacity-50 text-white font-semibold text-sm py-2.5 rounded-xl transition-colors"
             >
-              {syncing ? <Spinner className="h-4 w-4" /> : '🔄'} {syncing ? t('profile.syncing') : t('profile.sync')}
+              {syncing ? <Spinner className="h-4 w-4" /> : '🔄'}{' '}
+              {syncing ? t('profile.syncing') : t('profile.sync')}
             </button>
             {syncMsg && <p className="mt-3 text-xs text-center text-gray-500">{syncMsg}</p>}
           </div>
@@ -85,31 +93,45 @@ export default function Profile() {
             </div>
 
             {loading ? (
-              <div className="flex justify-center py-10"><Spinner /></div>
+              <div className="flex justify-center py-10">
+                <Spinner />
+              </div>
             ) : myTournaments.length === 0 ? (
               <div className="px-6 py-12 text-center text-gray-400">
                 <p className="text-4xl mb-3">🏁</p>
                 <p className="font-medium">{t('profile.notParticipating')}</p>
-                <a href="/tournaments" className="mt-3 inline-block text-sm text-[#fc4c02] hover:underline">
+                <a
+                  href="/tournaments"
+                  className="mt-3 inline-block text-sm text-[#fc4c02] hover:underline"
+                >
                   {t('profile.viewTournaments')}
                 </a>
               </div>
             ) : (
               <div className="divide-y divide-gray-50">
-                {myTournaments.map(tournament => (
+                {myTournaments.map((tournament) => (
                   <div key={tournament.id} className="flex items-center justify-between px-6 py-4">
                     <div>
-                      <a href={`/tournaments/${tournament.id}`} className="font-semibold text-gray-900 hover:text-[#fc4c02] transition-colors">
+                      <a
+                        href={`/tournaments/${tournament.id}`}
+                        className="font-semibold text-gray-900 hover:text-[#fc4c02] transition-colors"
+                      >
                         {tournament.name}
                       </a>
                       <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
-                        <span>{tournament.total_segments_count} {t('profile.segments')}</span>
+                        <span>
+                          {tournament.total_segments_count} {t('profile.segments')}
+                        </span>
                         <span>👥 {tournament.participants_count}</span>
-                        {tournament.starts_at && <span>{new Date(tournament.starts_at).toLocaleDateString(locale)}</span>}
+                        {tournament.starts_at && (
+                          <span>{new Date(tournament.starts_at).toLocaleDateString(locale)}</span>
+                        )}
                       </div>
                     </div>
                     <div className="flex items-center gap-3 flex-shrink-0">
-                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${STATUS_COLORS[tournament.status]}`}>
+                      <span
+                        className={`text-xs font-semibold px-2.5 py-1 rounded-full ${STATUS_COLORS[tournament.status]}`}
+                      >
                         {t(`status.${tournament.status}`)}
                       </span>
                       <a
@@ -125,7 +147,6 @@ export default function Profile() {
             )}
           </div>
         </div>
-
       </div>
     </Layout>
   )
@@ -134,8 +155,8 @@ export default function Profile() {
 function StravaIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066z"/>
-      <path d="M11.374 14.105l2.197-4.35-2.197-4.332L9.178 9.755z"/>
+      <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066z" />
+      <path d="M11.374 14.105l2.197-4.35-2.197-4.332L9.178 9.755z" />
     </svg>
   )
 }

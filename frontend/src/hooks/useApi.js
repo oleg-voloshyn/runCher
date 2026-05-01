@@ -1,18 +1,29 @@
 import { useEffect, useState } from 'react'
 
 export function useApi(fn, deps = []) {
-  const [data, setData]     = useState(null)
+  const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError]   = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     let cancelled = false
-    setLoading(true)
+    setLoading(true) // eslint-disable-line react-hooks/set-state-in-effect
     fn()
-      .then(d => { if (!cancelled) { setData(d); setError(null) } })
-      .catch(e => { if (!cancelled) setError(e.message) })
-      .finally(() => { if (!cancelled) setLoading(false) })
-    return () => { cancelled = true }
+      .then((d) => {
+        if (!cancelled) {
+          setData(d)
+          setError(null)
+        }
+      })
+      .catch((e) => {
+        if (!cancelled) setError(e.message)
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
   }, deps) // eslint-disable-line react-hooks/exhaustive-deps
 
   return { data, loading, error, setData }

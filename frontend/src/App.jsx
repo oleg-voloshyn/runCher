@@ -2,11 +2,11 @@ import { Routes, Route } from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext'
 import Spinner from './components/Spinner'
 
-import Home             from './pages/Home'
-import Tournaments      from './pages/Tournaments'
+import Home from './pages/Home'
+import Tournaments from './pages/Tournaments'
 import TournamentDetail from './pages/TournamentDetail'
-import Leaderboard      from './pages/Leaderboard'
-import Profile          from './pages/Profile'
+import Leaderboard from './pages/Leaderboard'
+import Profile from './pages/Profile'
 
 export default function App() {
   const { loading } = useAuth()
@@ -21,13 +21,13 @@ export default function App() {
 
   return (
     <Routes>
-      <Route path="/"                               element={<Home />} />
-      <Route path="/tournaments"                    element={<Tournaments />} />
-      <Route path="/tournaments/:id"                element={<TournamentDetail />} />
-      <Route path="/tournaments/:id/leaderboard"    element={<Leaderboard />} />
-      <Route path="/profile"                        element={<Profile />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/tournaments" element={<Tournaments />} />
+      <Route path="/tournaments/:id" element={<TournamentDetail />} />
+      <Route path="/tournaments/:id/leaderboard" element={<Leaderboard />} />
+      <Route path="/profile" element={<Profile />} />
       {/* Catch auth redirect back from Strava */}
-      <Route path="/auth/strava/callback"           element={<OAuthCallback />} />
+      <Route path="/auth/strava/callback" element={<OAuthCallback />} />
     </Routes>
   )
 }

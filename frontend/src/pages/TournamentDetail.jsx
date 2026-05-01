@@ -7,7 +7,11 @@ import { useApi } from '../hooks/useApi'
 import { useAuth } from '../contexts/AuthContext'
 import { api } from '../api/client'
 
-const STATUS_COLORS = { draft: 'bg-gray-100 text-gray-600', active: 'bg-green-100 text-green-700', completed: 'bg-blue-100 text-blue-700' }
+const STATUS_COLORS = {
+  draft: 'bg-gray-100 text-gray-600',
+  active: 'bg-green-100 text-green-700',
+  completed: 'bg-blue-100 text-blue-700',
+}
 
 export default function TournamentDetail() {
   const { id } = useParams()
@@ -24,7 +28,7 @@ export default function TournamentDetail() {
     setJoining(true)
     try {
       await api.joinTournament(id)
-      setData(t => ({ ...t, joined: true, participants_count: t.participants_count + 1 }))
+      setData((t) => ({ ...t, joined: true, participants_count: t.participants_count + 1 }))
     } catch (e) {
       alert(e.message)
     } finally {
@@ -36,7 +40,7 @@ export default function TournamentDetail() {
     setJoining(true)
     try {
       await api.leaveTournament(id)
-      setData(t => ({ ...t, joined: false, participants_count: t.participants_count - 1 }))
+      setData((t) => ({ ...t, joined: false, participants_count: t.participants_count - 1 }))
     } catch (e) {
       alert(e.message)
     } finally {
@@ -56,30 +60,65 @@ export default function TournamentDetail() {
     }
   }
 
-  if (loading) return <Layout><div className="flex justify-center py-20"><Spinner /></div></Layout>
-  if (error)   return <Layout><div className="bg-red-50 border border-red-200 rounded-xl p-6 text-red-700">{error}</div></Layout>
+  if (loading)
+    return (
+      <Layout>
+        <div className="flex justify-center py-20">
+          <Spinner />
+        </div>
+      </Layout>
+    )
+  if (error)
+    return (
+      <Layout>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-red-700">{error}</div>
+      </Layout>
+    )
   if (!tournament) return null
 
-  const { name, description, status, starts_at, total_segments_count, rated_segments_count, participants_count, joined, segments = [] } = tournament
+  const {
+    name,
+    description,
+    status,
+    starts_at,
+    total_segments_count,
+    rated_segments_count,
+    participants_count,
+    joined,
+    segments = [],
+  } = tournament
 
   return (
     <Layout>
       {/* Header */}
       <div className="mb-8">
-        <Link to="/tournaments" className="text-sm text-gray-400 hover:text-gray-600 mb-4 inline-block">{t('detail.backToAll')}</Link>
+        <Link
+          to="/tournaments"
+          className="text-sm text-gray-400 hover:text-gray-600 mb-4 inline-block"
+        >
+          {t('detail.backToAll')}
+        </Link>
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-3xl font-black text-gray-900">{name}</h1>
-              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${STATUS_COLORS[status]}`}>
+              <span
+                className={`text-xs font-semibold px-2.5 py-1 rounded-full ${STATUS_COLORS[status]}`}
+              >
                 {t(`status.${status}`)}
               </span>
             </div>
             {description && <p className="text-gray-500">{description}</p>}
             <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
-              <span>📍 {total_segments_count} {t('detail.segments')}</span>
-              <span>🏆 {rated_segments_count} {t('detail.rated')}</span>
-              <span>👥 {participants_count} {t('detail.participants')}</span>
+              <span>
+                📍 {total_segments_count} {t('detail.segments')}
+              </span>
+              <span>
+                🏆 {rated_segments_count} {t('detail.rated')}
+              </span>
+              <span>
+                👥 {participants_count} {t('detail.participants')}
+              </span>
               {starts_at && <span>📅 {new Date(starts_at).toLocaleDateString(locale)}</span>}
             </div>
           </div>
@@ -141,11 +180,16 @@ export default function TournamentDetail() {
         </div>
 
         {segments.length === 0 ? (
-          <div className="px-6 py-10 text-center text-gray-400 text-sm">{t('detail.noSegments')}</div>
+          <div className="px-6 py-10 text-center text-gray-400 text-sm">
+            {t('detail.noSegments')}
+          </div>
         ) : (
           <div className="divide-y divide-gray-50">
             {segments.map((seg, i) => (
-              <div key={seg.id} className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors">
+              <div
+                key={seg.id}
+                className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors"
+              >
                 <div className="flex items-center gap-4">
                   <span className="w-7 h-7 rounded-full bg-gray-100 text-gray-500 text-xs font-bold flex items-center justify-center flex-shrink-0">
                     {i + 1}

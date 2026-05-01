@@ -15,7 +15,6 @@ export default function Navbar() {
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-
         <Link to="/" className="flex items-center gap-2">
           <span className="text-xl font-black text-[#fc4c02] tracking-tight">RunCher</span>
         </Link>
@@ -60,16 +59,23 @@ export default function Navbar() {
           {user ? (
             <div className="flex items-center gap-3">
               {user.profile_picture && (
-                <img src={user.profile_picture} alt={user.full_name} className="w-8 h-8 rounded-full object-cover" />
+                <img
+                  src={user.profile_picture}
+                  alt={user.full_name}
+                  className="w-8 h-8 rounded-full object-cover"
+                />
               )}
-              <span className="text-sm font-medium text-gray-700 hidden sm:block">{user.first_name}</span>
+              <span className="text-sm font-medium text-gray-700 hidden sm:block">
+                {user.first_name}
+              </span>
               <a
                 href="/logout"
                 data-method="delete"
-                onClick={e => {
+                onClick={(e) => {
                   e.preventDefault()
-                  fetch('/logout', { method: 'DELETE', credentials: 'include' })
-                    .then(() => window.location.href = '/')
+                  fetch('/logout', { method: 'DELETE', credentials: 'include' }).then(
+                    () => (window.location.href = '/')
+                  )
                 }}
                 className="text-sm text-gray-500 hover:text-gray-800 transition-colors"
               >
@@ -86,7 +92,6 @@ export default function Navbar() {
             </a>
           )}
         </div>
-
       </div>
     </header>
   )
@@ -95,8 +100,8 @@ export default function Navbar() {
 function StravaIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066z"/>
-      <path d="M11.374 14.105l2.197-4.35-2.197-4.332L9.178 9.755z"/>
+      <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066z" />
+      <path d="M11.374 14.105l2.197-4.35-2.197-4.332L9.178 9.755z" />
     </svg>
   )
 }
