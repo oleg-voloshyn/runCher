@@ -14,7 +14,8 @@ Rails.application.routes.draw do
         post :activate
         post :complete
       end
-      resources :tournament_segments, only: [:create, :destroy], path: :segments
+      resources :tournament_segments,    only: [:create, :destroy], path: :segments
+      resources :tournament_participants, only: [:create, :destroy], path: :participants
     end
     resources :segments, only: [:index, :show, :new, :create, :destroy]
     resources :users,    only: [:index, :show] do

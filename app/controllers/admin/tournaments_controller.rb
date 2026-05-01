@@ -8,8 +8,12 @@ module Admin
     end
 
     def show
-      @tournament_segments = @tournament.tournament_segments.includes(:segment).order(:is_rated, :order_number)
-      @participants = @tournament.tournament_participants.includes(:user).order(:gender, completion_order: :asc)
+      @tournament_segments  = @tournament.tournament_segments.includes(:segment).order(:is_rated, :order_number)
+      @participants         = @tournament.tournament_participants.includes(:user).order(:gender, completion_order: :asc)
+      existing_ids          = @tournament_segments.map(&:segment_id)
+      @available_segments   = Segment.where.not(id: existing_ids).order(:name)
+      participant_user_ids  = @participants.map(&:user_id)
+      @available_users      = User.where.not(id: participant_user_ids).order(:first_name, :last_name)
     end
 
     def new

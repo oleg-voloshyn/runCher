@@ -55,6 +55,30 @@
       </dl>
     </div>
 
+    <%# Add participant form %>
+    <% if @tournament.status != 'completed' %>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+        <h2 class="font-semibold text-gray-800 mb-4">Додати учасника</h2>
+        <%= form_with url: admin_tournament_tournament_participants_path(@tournament), method: :post, class: "space-y-3" do |f| %>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Користувач</label>
+            <%= select_tag 'tournament_participant[user_id]',
+                options_from_collection_for_select(@available_users, :id, :full_name),
+                prompt: @available_users.any? ? 'Оберіть користувача...' : 'Усі користувачі вже учасники',
+                disabled: @available_users.empty?,
+                class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 disabled:bg-gray-50 disabled:text-gray-400" %>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Стать (для рейтингу)</label>
+            <%= select_tag 'tournament_participant[gender]',
+                options_for_select([['♂ Чоловік', 'male'], ['♀ Жінка', 'female']]),
+                class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" %>
+          </div>
+          <%= f.submit "Додати", class: "w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium py-2 rounded-lg cursor-pointer transition-colors" %>
+        <% end %>
+      </div>
+    <% end %>
+
     <%# Add segment form %>
     <% if @tournament.status != 'completed' %>
       <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
@@ -63,9 +87,10 @@
           <div>
             <label class="block text-xs font-medium text-gray-600 mb-1">Сегмент</label>
             <%= select_tag 'tournament_segment[segment_id]',
-                options_from_collection_for_select(Segment.order(:name), :id, :name),
-                prompt: 'Оберіть сегмент...',
-                class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" %>
+                options_from_collection_for_select(@available_segments, :id, :name),
+                prompt: @available_segments.any? ? 'Оберіть сегмент...' : 'Усі сегменти вже додані',
+                disabled: @available_segments.empty?,
+                class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 disabled:bg-gray-50 disabled:text-gray-400" %>
           </div>
           <div class="flex items-center gap-3">
             <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
@@ -145,6 +170,7 @@
             <th class="px-6 py-3 font-semibold text-gray-600 text-right">Бали</th>
             <th class="px-6 py-3 font-semibold text-gray-600 text-right">Бонус</th>
             <th class="px-6 py-3 font-semibold text-gray-600 text-center">Місце</th>
+            <th class="px-6 py-3"></th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-50">
@@ -168,10 +194,18 @@
                   <span class="text-gray-300">—</span>
                 <% end %>
               </td>
+              <td class="px-6 py-3 text-right">
+                <% if @tournament.status != 'completed' %>
+                  <%= button_to "✕", admin_tournament_tournament_participant_path(@tournament, p),
+                      method: :delete,
+                      class: "text-xs text-red-400 hover:text-red-600 transition-colors",
+                      data: { turbo_confirm: "Видалити #{p.user.full_name} з турніру?" } %>
+                <% end %>
+              </td>
             </tr>
           <% end %>
           <% if @participants.empty? %>
-            <tr><td colspan="5" class="px-6 py-6 text-center text-gray-400 text-sm">Немає учасників</td></tr>
+            <tr><td colspan="6" class="px-6 py-6 text-center text-gray-400 text-sm">Немає учасників</td></tr>
           <% end %>
         </tbody>
       </table>

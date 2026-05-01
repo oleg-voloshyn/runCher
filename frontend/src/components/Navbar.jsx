@@ -31,11 +31,14 @@ export default function Navbar() {
               Профіль
             </NavLink>
           )}
-          {user?.role === 'admin' || user?.role === 'moderator' ? (
-            <a href="/admin" className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors">
+          {(user?.role === 'admin' || user?.role === 'moderator') && (
+            <a
+              href={`${import.meta.env.VITE_RAILS_URL || 'http://localhost:3000'}/admin`}
+              className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+            >
               Admin
             </a>
-          ) : null}
+          )}
         </nav>
 
         <div className="flex items-center gap-3">

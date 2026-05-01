@@ -22,7 +22,8 @@ class User < ApplicationRecord
   end
 
   def ensure_fresh_token!
-    return unless token_expired?
+    raise "No Strava token — please log out and log in again via Strava" if access_token.blank? && refresh_token.blank?
+    return unless token_expired? || access_token.blank?
 
     client = Strava::OAuth::Client.new(
       client_id:     ENV['STRAVA_CLIENT_ID'],
