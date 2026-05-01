@@ -9,7 +9,7 @@ module Api
         participants = participants.where(gender: gender) if gender.present?
         participants = participants
           .includes(:user)
-          .order('(total_score + bonus_score) DESC', :completion_order)
+          .order(Arel.sql('(total_score + bonus_score) DESC'), :completion_order)
 
         # Segment leaderboard (best efforts per segment, by gender)
         segment_leaders = build_segment_leaders(tournament, gender)
