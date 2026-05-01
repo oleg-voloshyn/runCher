@@ -1,0 +1,33 @@
+databases:
+  - name: runcher-db
+    databaseName: runcher_production
+    user: runcher
+    plan: free
+
+services:
+  - type: web
+    name: runcher
+    runtime: ruby
+    plan: free
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    healthCheckPath: /up
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_SERVE_STATIC_FILES
+        value: "true"
+      - key: RAILS_LOG_TO_STDOUT
+        value: "true"
+      - key: RAILS_MASTER_KEY
+        sync: false          # paste from config/master.key
+      - key: DATABASE_URL
+        fromDatabase:
+          name: runcher-db
+          property: connectionString
+      - key: STRAVA_CLIENT_ID
+        sync: false          # from Strava developer portal
+      - key: STRAVA_CLIENT_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        sync: false          # set to https://<your-app>.onrender.com after first deploy

@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Strava OAuth
-  root 'strava#index'
+  root to: 'spa#index'
   get  '/auth/strava/callback', to: 'sessions#create'
   delete '/logout',             to: 'sessions#destroy'
 
@@ -57,4 +57,11 @@ Rails.application.routes.draw do
       post 'sync_activities', to: 'activities#sync'
     end
   end
+
+  # React SPA catch-all — MUST be last so all other routes take precedence.
+  # Lets React Router handle deep links and page refreshes.
+  get '*path', to: 'spa#index',
+      constraints: ->(req) {
+        !req.path.start_with?('/api/', '/admin', '/auth/', '/logout', '/rails/', '/up') && !req.xhr?
+      }
 end
