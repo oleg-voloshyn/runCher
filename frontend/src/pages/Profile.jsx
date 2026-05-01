@@ -10,7 +10,7 @@ const STATUS_COLORS = { draft: 'bg-gray-100 text-gray-600', active: 'bg-green-10
 const STATUS_LABELS = { draft: 'Чернетка', active: 'Активний', completed: 'Завершено' }
 
 export default function Profile() {
-  const { user, setUser } = useAuth()
+  const { user } = useAuth()
   const [syncing, setSyncing]   = useState(false)
   const [syncMsg, setSyncMsg]   = useState(null)
   const { data: tournaments, loading } = useApi(() => api.getTournaments())
@@ -29,15 +29,6 @@ export default function Profile() {
       setSyncMsg(e.message)
     } finally {
       setSyncing(false)
-    }
-  }
-
-  async function handleGender(gender) {
-    try {
-      const updated = await api.updateGender(gender)
-      setUser(updated)
-    } catch (e) {
-      alert(e.message)
     }
   }
 
@@ -68,25 +59,6 @@ export default function Profile() {
               </a>
             </div>
 
-            {/* Gender picker */}
-            <div className="border-t border-gray-100 pt-4">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Стать</p>
-              <div className="flex gap-2">
-                {['male', 'female'].map(g => (
-                  <button
-                    key={g}
-                    onClick={() => handleGender(g)}
-                    className={`flex-1 py-2 rounded-xl text-sm font-medium border transition-colors ${
-                      user.gender === g
-                        ? 'bg-[#fc4c02] text-white border-[#fc4c02]'
-                        : 'border-gray-200 text-gray-600 hover:border-gray-300'
-                    }`}
-                  >
-                    {g === 'male' ? '♂ Чоловік' : '♀ Жінка'}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
 
           {/* Sync card */}
