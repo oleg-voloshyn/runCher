@@ -22,9 +22,7 @@ class SegmentsController < ApplicationController
         return
       end
   
-      # Fetch from Strava API
       client = Strava::Api::Client.new(access_token: access_token)
-  binding.pry
       begin
         segment_data = client.segment(strava_id)
   
