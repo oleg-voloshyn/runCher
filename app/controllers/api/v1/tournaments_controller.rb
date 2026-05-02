@@ -102,8 +102,13 @@ module Api
         }
 
         if detail
+          # A segment is "revealed" once any participant has a score for it in this tournament.
+          # Until then, regular users don't know whether it's rated or not.
+          revealed_ids = t.tournament_scores.distinct.pluck(:segment_id).to_set
+
           json[:segments] = t.all_tournament_segments.map do |ts|
             seg = ts.segment
+            show_rated = current_user.moderator? || revealed_ids.include?(seg.id)
             {
               id:              seg.id,
               strava_id:       seg.strava_id,
@@ -115,8 +120,8 @@ module Api
               end_latitude:    seg.end_latitude,
               end_longitude:   seg.end_longitude,
               polyline:        seg.polyline,
-              is_rated:        current_user.moderator? ? ts.is_rated : nil,
-              order_number:    current_user.moderator? ? ts.order_number : nil
+              is_rated:        show_rated ? ts.is_rated : nil,
+              order_number:    show_rated ? ts.order_number : nil
             }.compact
           end
         end
