@@ -47,14 +47,18 @@ module Api
 
         summary_list = client.athlete_activities(per_page: 200, after: after_time.to_i)
 
+        all_types = summary_list.map { |a| a.respond_to?(:sport_type) ? a.sport_type.to_s : a['type'].to_s }
+        Rails.logger.info "Sync user=#{current_user.id} after=#{after_time} total=#{summary_list.size} types=#{all_types.tally}"
+
         run_ids = summary_list.filter_map do |a|
-          activity_type = a.respond_to?(:sport_type) ? a.sport_type : a['type']
+          activity_type = a.respond_to?(:sport_type) ? a.sport_type.to_s : a['type'].to_s
           next if activity_type != 'Run'
           next if Activity.exists?(strava_activity_id: a['id'].to_s, processed: true)
           a['id'].to_s
         end
 
         processed_count = 0
+        debug_info = { after_time: after_time, total_from_strava: summary_list.size, activity_types: all_types.tally, run_ids_count: run_ids.size }
 
         run_ids.each do |strava_id|
           detail = client.activity(strava_id)
@@ -97,7 +101,8 @@ module Api
 
         render json: {
           message:     "Знайдено #{processed_count} нових пробіжок",
-          next_sync_at: new_next_sync_at
+          next_sync_at: new_next_sync_at,
+          debug:        debug_info
         }
       rescue Strava::Errors::Fault => e
         render json: { error: e.message }, status: :unprocessable_entity
