@@ -22,6 +22,10 @@ export default function TournamentDetail() {
   const { data: tournament, loading, error, setData } = useApi(() => api.getTournament(id), [id])
   const [joining, setJoining] = useState(false)
   const [syncing, setSyncing] = useState(false)
+  const [nextSyncAt, setNextSyncAt] = useState(() =>
+    user?.next_sync_at ? new Date(user.next_sync_at) : null
+  )
+  const syncOnCooldown = nextSyncAt && nextSyncAt > new Date()
   const locale = i18n.language === 'uk' ? 'uk-UA' : 'en-GB'
 
   async function handleJoin() {
@@ -53,6 +57,7 @@ export default function TournamentDetail() {
     setSyncing(true)
     try {
       const res = await api.syncActivities()
+      if (res.next_sync_at) setNextSyncAt(new Date(res.next_sync_at))
       alert(res.message)
     } catch (e) {
       alert(e.message)
@@ -129,13 +134,21 @@ export default function TournamentDetail() {
           <div className="flex flex-wrap gap-2">
             {joined ? (
               <>
-                <button
-                  onClick={handleSync}
-                  disabled={syncing}
-                  className="flex items-center gap-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium px-4 py-2 rounded-xl transition-colors disabled:opacity-50"
-                >
-                  {syncing ? <Spinner className="h-4 w-4" /> : '🔄'} {t('detail.syncStrava')}
-                </button>
+                <div className="flex flex-col items-start gap-0.5">
+                  <button
+                    onClick={handleSync}
+                    disabled={syncing || syncOnCooldown}
+                    className="flex items-center gap-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium px-4 py-2 rounded-xl transition-colors disabled:opacity-50"
+                  >
+                    {syncing ? <Spinner className="h-4 w-4" /> : '🔄'} {t('detail.syncStrava')}
+                  </button>
+                  {syncOnCooldown && (
+                    <span className="text-xs text-gray-400 px-1">
+                      {t('profile.nextSyncAt')}{' '}
+                      {nextSyncAt.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  )}
+                </div>
                 <button
                   onClick={handleLeave}
                   disabled={joining}

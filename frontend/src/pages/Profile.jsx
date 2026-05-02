@@ -18,12 +18,16 @@ export default function Profile() {
   const { t, i18n } = useTranslation()
   const [syncing, setSyncing] = useState(false)
   const [syncMsg, setSyncMsg] = useState(null)
+  const [nextSyncAt, setNextSyncAt] = useState(() =>
+    user?.next_sync_at ? new Date(user.next_sync_at) : null
+  )
   const { data: tournaments, loading } = useApi(() => api.getTournaments())
   const locale = i18n.language === 'uk' ? 'uk-UA' : 'en-GB'
 
   if (!user) return <Navigate to="/" replace />
 
   const myTournaments = (tournaments || []).filter((t) => t.joined)
+  const syncOnCooldown = nextSyncAt && nextSyncAt > new Date()
 
   async function handleSync() {
     setSyncing(true)
@@ -31,6 +35,7 @@ export default function Profile() {
     try {
       const res = await api.syncActivities()
       setSyncMsg(res.message)
+      if (res.next_sync_at) setNextSyncAt(new Date(res.next_sync_at))
     } catch (e) {
       setSyncMsg(e.message)
     } finally {
@@ -75,12 +80,18 @@ export default function Profile() {
             <p className="text-xs text-gray-400 mb-4">{t('profile.syncDesc')}</p>
             <button
               onClick={handleSync}
-              disabled={syncing}
+              disabled={syncing || syncOnCooldown}
               className="w-full flex items-center justify-center gap-2 bg-[#fc4c02] hover:bg-[#e04400] disabled:opacity-50 text-white font-semibold text-sm py-2.5 rounded-xl transition-colors"
             >
               {syncing ? <Spinner className="h-4 w-4" /> : '🔄'}{' '}
               {syncing ? t('profile.syncing') : t('profile.sync')}
             </button>
+            {syncOnCooldown && (
+              <p className="mt-2 text-xs text-center text-gray-400">
+                {t('profile.nextSyncAt')}{' '}
+                {nextSyncAt.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}
+              </p>
+            )}
             {syncMsg && <p className="mt-3 text-xs text-center text-gray-500">{syncMsg}</p>}
           </div>
         </div>

@@ -86,9 +86,10 @@
     "notParticipating": "You are not participating in any tournaments yet",
     "viewTournaments": "View available tournaments →",
     "syncTitle": "Strava Sync",
-    "syncDesc": "Loads the last 30 activities and checks segment coverage",
+    "syncDesc": "Loads activities from Strava and checks segment coverage",
     "syncing": "Syncing...",
     "sync": "Sync",
+    "nextSyncAt": "Next sync available at",
     "segments": "segments",
     "participants": "participants",
     "leaderboard": "Leaderboard →"

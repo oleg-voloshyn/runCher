@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_02_101809) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_02_205708) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -131,6 +131,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_02_101809) do
     t.string "first_name"
     t.string "gender", default: "male"
     t.string "last_name"
+    t.datetime "last_synced_at"
     t.string "mobile_token"
     t.string "profile_picture"
     t.string "refresh_token"

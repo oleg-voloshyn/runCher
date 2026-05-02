@@ -26,7 +26,9 @@ module Api
           profile_picture: user.profile_picture,
           gender:          user.gender,
           role:            user.role,
-          strava_id:       user.strava_id
+          strava_id:       user.strava_id,
+          last_synced_at:  user.last_synced_at,
+          next_sync_at:    user.last_synced_at && user.last_synced_at + Api::V1::ActivitiesController::SYNC_COOLDOWN
         }
       end
     end
