@@ -11,6 +11,6 @@ class SegmentEffort < ApplicationRecord
   private
 
   def update_tournament_scores
-    ProcessSegmentEffortJob.perform_later(id)
+    TournamentScore.process_effort(self)
   end
 end
