@@ -36,13 +36,15 @@ module Api
         current_user.ensure_fresh_token!
         client = Strava::Api::Client.new(access_token: current_user.access_token)
 
-        after_time = if current_user.last_synced_at
+        tournament_start = Tournament
+          .joins(:tournament_participants)
+          .where(status: 'active', tournament_participants: { user_id: current_user.id })
+          .minimum(:starts_at) || 30.days.ago
+
+        after_time = if current_user.last_synced_at && current_user.activities.where(processed: true).exists?
           current_user.last_synced_at
         else
-          Tournament
-            .joins(:tournament_participants)
-            .where(status: 'active', tournament_participants: { user_id: current_user.id })
-            .minimum(:starts_at) || 30.days.ago
+          tournament_start
         end
 
         summary_list = client.athlete_activities(per_page: 200, after: after_time.to_i)
