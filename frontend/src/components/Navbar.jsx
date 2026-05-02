@@ -51,7 +51,7 @@ export default function Navbar() {
           )}
           {(user?.role === 'admin' || user?.role === 'moderator') && (
             <a
-              href={`${import.meta.env.VITE_RAILS_URL || 'http://localhost:3000'}/admin`}
+              href="/admin"
               className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
             >
               Admin
@@ -137,7 +137,7 @@ export default function Navbar() {
           )}
           {(user?.role === 'admin' || user?.role === 'moderator') && (
             <a
-              href={`${import.meta.env.VITE_RAILS_URL || 'http://localhost:3000'}/admin`}
+              href="/admin"
               className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
               onClick={closeMenu}
             >
