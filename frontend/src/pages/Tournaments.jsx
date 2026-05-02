@@ -21,15 +21,15 @@ export default function Tournaments() {
 
   return (
     <Layout>
-      <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
-        <h1 className="text-3xl font-black text-gray-900">{t('tournaments.title')}</h1>
+      <div className="flex items-center justify-between mb-6 sm:mb-8 flex-wrap gap-4">
+        <h1 className="text-2xl sm:text-3xl font-black text-gray-900">{t('tournaments.title')}</h1>
 
         <div className="flex items-center bg-white border border-gray-200 rounded-xl p-1 gap-1">
           {FILTERS.map(({ key, label }) => (
             <button
               key={key}
               onClick={() => setFilter(key)}
-              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
                 filter === key ? 'bg-[#fc4c02] text-white' : 'text-gray-600 hover:text-gray-900'
               }`}
             >

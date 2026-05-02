@@ -26,7 +26,7 @@ export default function TournamentCard({ tournament }) {
   return (
     <Link
       to={`/tournaments/${id}`}
-      className="block bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-md hover:border-orange-200 transition-all group"
+      className="block bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 hover:shadow-md hover:border-orange-200 transition-all group"
     >
       <div className="flex items-start justify-between gap-3 mb-3">
         <h3 className="font-bold text-gray-900 text-lg leading-tight group-hover:text-[#fc4c02] transition-colors">
@@ -41,7 +41,7 @@ export default function TournamentCard({ tournament }) {
 
       {description && <p className="text-sm text-gray-500 mb-4 line-clamp-2">{description}</p>}
 
-      <div className="flex items-center gap-4 text-sm text-gray-500">
+      <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
         <span>
           📍 {total_segments_count} {t('card.segments')}
         </span>

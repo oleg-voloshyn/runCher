@@ -91,70 +91,67 @@ export default function TournamentDetail() {
   return (
     <Layout>
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <Link
           to="/tournaments"
           className="text-sm text-gray-400 hover:text-gray-600 mb-4 inline-block"
         >
           {t('detail.backToAll')}
         </Link>
-        <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-3xl font-black text-gray-900">{name}</h1>
-              <span
-                className={`text-xs font-semibold px-2.5 py-1 rounded-full ${STATUS_COLORS[status]}`}
-              >
-                {t(`status.${status}`)}
-              </span>
-            </div>
-            {description && <p className="text-gray-500">{description}</p>}
-            <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
-              <span>
-                📍 {total_segments_count} {t('detail.segments')}
-              </span>
-              <span>
-                🏆 {rated_segments_count} {t('detail.rated')}
-              </span>
-              <span>
-                👥 {participants_count} {t('detail.participants')}
-              </span>
-              {starts_at && <span>📅 {new Date(starts_at).toLocaleDateString(locale)}</span>}
-            </div>
-          </div>
 
-          <div className="flex items-center gap-3">
-            {status === 'active' && user && (
+        <div className="flex items-start gap-3 mb-2 flex-wrap">
+          <h1 className="text-2xl sm:text-3xl font-black text-gray-900">{name}</h1>
+          <span
+            className={`text-xs font-semibold px-2.5 py-1 rounded-full self-center shrink-0 ${STATUS_COLORS[status]}`}
+          >
+            {t(`status.${status}`)}
+          </span>
+        </div>
+
+        {description && <p className="text-gray-500 text-sm sm:text-base mb-3">{description}</p>}
+
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500 mb-4">
+          <span>
+            📍 {total_segments_count} {t('detail.segments')}
+          </span>
+          <span>
+            🏆 {rated_segments_count} {t('detail.rated')}
+          </span>
+          <span>
+            👥 {participants_count} {t('detail.participants')}
+          </span>
+          {starts_at && <span>📅 {new Date(starts_at).toLocaleDateString(locale)}</span>}
+        </div>
+
+        {/* Action buttons */}
+        {status === 'active' && user && (
+          <div className="flex flex-wrap gap-2">
+            {joined ? (
               <>
-                {joined ? (
-                  <>
-                    <button
-                      onClick={handleSync}
-                      disabled={syncing}
-                      className="flex items-center gap-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium px-4 py-2 rounded-xl transition-colors disabled:opacity-50"
-                    >
-                      {syncing ? <Spinner className="h-4 w-4" /> : '🔄'} {t('detail.syncStrava')}
-                    </button>
-                    <button
-                      onClick={handleLeave}
-                      disabled={joining}
-                      className="text-sm text-red-500 hover:text-red-700 border border-red-200 px-4 py-2 rounded-xl transition-colors"
-                    >
-                      {t('detail.leaveTournament')}
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    onClick={handleJoin}
-                    disabled={joining}
-                    className="bg-[#fc4c02] hover:bg-[#e04400] text-white font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors disabled:opacity-50"
-                  >
-                    {joining ? t('detail.joining') : t('detail.join')}
-                  </button>
-                )}
+                <button
+                  onClick={handleSync}
+                  disabled={syncing}
+                  className="flex items-center gap-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium px-4 py-2 rounded-xl transition-colors disabled:opacity-50"
+                >
+                  {syncing ? <Spinner className="h-4 w-4" /> : '🔄'} {t('detail.syncStrava')}
+                </button>
+                <button
+                  onClick={handleLeave}
+                  disabled={joining}
+                  className="text-sm text-red-500 hover:text-red-700 border border-red-200 px-4 py-2 rounded-xl transition-colors disabled:opacity-50"
+                >
+                  {t('detail.leaveTournament')}
+                </button>
               </>
+            ) : (
+              <button
+                onClick={handleJoin}
+                disabled={joining}
+                className="bg-[#fc4c02] hover:bg-[#e04400] text-white font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors disabled:opacity-50"
+              >
+                {joining ? t('detail.joining') : t('detail.join')}
+              </button>
             )}
-
             <Link
               to={`/tournaments/${id}/leaderboard`}
               className="border border-[#fc4c02] text-[#fc4c02] hover:bg-orange-50 font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
@@ -162,19 +159,28 @@ export default function TournamentDetail() {
               {t('detail.leaderboard')}
             </Link>
           </div>
-        </div>
+        )}
+
+        {!(status === 'active' && user) && (
+          <Link
+            to={`/tournaments/${id}/leaderboard`}
+            className="inline-flex border border-[#fc4c02] text-[#fc4c02] hover:bg-orange-50 font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
+          >
+            {t('detail.leaderboard')}
+          </Link>
+        )}
       </div>
 
       {/* Joined banner */}
       {joined && status === 'active' && (
-        <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-3 mb-6 text-sm text-green-800 font-medium flex items-center gap-2">
+        <div className="bg-green-50 border border-green-200 rounded-xl px-4 sm:px-5 py-3 mb-6 text-sm text-green-800 font-medium">
           ✅ {t('detail.participantBanner')}
         </div>
       )}
 
       {/* Segments */}
       <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100">
+        <div className="px-4 sm:px-6 py-4 border-b border-gray-100">
           <h2 className="font-bold text-gray-900">{t('detail.tournamentSegments')}</h2>
           <p className="text-xs text-gray-400 mt-0.5">{t('detail.segmentsHidden')}</p>
         </div>
@@ -188,14 +194,16 @@ export default function TournamentDetail() {
             {segments.map((seg, i) => (
               <div
                 key={seg.id}
-                className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors"
+                className="flex items-center justify-between px-4 sm:px-6 py-4 hover:bg-gray-50 transition-colors"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 min-w-0">
                   <span className="w-7 h-7 rounded-full bg-gray-100 text-gray-500 text-xs font-bold flex items-center justify-center flex-shrink-0">
                     {i + 1}
                   </span>
-                  <div>
-                    <p className="font-medium text-gray-900">{seg.name}</p>
+                  <div className="min-w-0">
+                    <p className="font-medium text-gray-900 text-sm sm:text-base truncate">
+                      {seg.name}
+                    </p>
                     <p className="text-xs text-gray-400 mt-0.5">
                       {seg.distance ? `${(seg.distance / 1000).toFixed(2)} km` : ''}
                       {seg.average_grade ? ` · ${seg.average_grade}% ${t('detail.grade')}` : ''}
@@ -204,9 +212,9 @@ export default function TournamentDetail() {
                 </div>
 
                 {seg.is_rated !== undefined && (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 shrink-0 ml-2">
                     {seg.is_rated ? (
-                      <span className="text-xs bg-orange-100 text-orange-700 font-semibold px-2.5 py-1 rounded-full">
+                      <span className="text-xs bg-orange-100 text-orange-700 font-semibold px-2 py-1 rounded-full whitespace-nowrap">
                         #{seg.order_number} {t('detail.rated')}
                       </span>
                     ) : (

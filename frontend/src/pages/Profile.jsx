@@ -44,15 +44,15 @@ export default function Profile() {
         {/* Profile card */}
         <div className="lg:col-span-1 space-y-4">
           <div className="bg-white rounded-2xl border border-gray-200 p-6">
-            <div className="flex flex-col items-center text-center mb-6">
+            <div className="flex flex-col items-center text-center mb-4">
               {user.profile_picture ? (
                 <img
                   src={user.profile_picture}
                   alt={user.full_name}
-                  className="w-24 h-24 rounded-full object-cover mb-4 ring-4 ring-orange-100"
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover mb-4 ring-4 ring-orange-100"
                 />
               ) : (
-                <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-3xl font-bold mb-4">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-3xl font-bold mb-4">
                   {user.first_name?.[0]}
                 </div>
               )}
@@ -88,7 +88,7 @@ export default function Profile() {
         {/* My tournaments */}
         <div className="lg:col-span-2">
           <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100">
+            <div className="px-4 sm:px-6 py-4 border-b border-gray-100">
               <h2 className="font-bold text-gray-900">{t('profile.myTournaments')}</h2>
             </div>
 
@@ -110,33 +110,35 @@ export default function Profile() {
             ) : (
               <div className="divide-y divide-gray-50">
                 {myTournaments.map((tournament) => (
-                  <div key={tournament.id} className="flex items-center justify-between px-6 py-4">
-                    <div>
+                  <div key={tournament.id} className="px-4 sm:px-6 py-4">
+                    <div className="flex items-start justify-between gap-2">
                       <a
                         href={`/tournaments/${tournament.id}`}
-                        className="font-semibold text-gray-900 hover:text-[#fc4c02] transition-colors"
+                        className="font-semibold text-gray-900 hover:text-[#fc4c02] transition-colors text-sm sm:text-base leading-tight"
                       >
                         {tournament.name}
                       </a>
-                      <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                      <span
+                        className={`text-xs font-semibold px-2 py-1 rounded-full shrink-0 ${STATUS_COLORS[tournament.status]}`}
+                      >
+                        {t(`status.${tournament.status}`)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between mt-1.5">
+                      <div className="flex items-center gap-3 text-xs text-gray-400">
                         <span>
                           {tournament.total_segments_count} {t('profile.segments')}
                         </span>
                         <span>👥 {tournament.participants_count}</span>
                         {tournament.starts_at && (
-                          <span>{new Date(tournament.starts_at).toLocaleDateString(locale)}</span>
+                          <span className="hidden sm:inline">
+                            {new Date(tournament.starts_at).toLocaleDateString(locale)}
+                          </span>
                         )}
                       </div>
-                    </div>
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                      <span
-                        className={`text-xs font-semibold px-2.5 py-1 rounded-full ${STATUS_COLORS[tournament.status]}`}
-                      >
-                        {t(`status.${tournament.status}`)}
-                      </span>
                       <a
                         href={`/tournaments/${tournament.id}/leaderboard`}
-                        className="text-xs text-[#fc4c02] hover:underline"
+                        className="text-xs text-[#fc4c02] hover:underline shrink-0"
                       >
                         {t('profile.leaderboard')}
                       </a>

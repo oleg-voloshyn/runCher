@@ -40,32 +40,32 @@ export default function Home() {
           <div className="absolute bottom-10 right-20 w-96 h-96 rounded-full bg-orange-400 blur-3xl" />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-6 py-24 sm:py-36 text-center">
+        <div className="relative max-w-6xl mx-auto px-6 py-16 sm:py-24 lg:py-36 text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 text-orange-300 text-sm font-medium px-4 py-2 rounded-full mb-6 backdrop-blur-sm">
             🏃 Черкаси · Strava Segments
           </div>
 
-          <h1 className="text-5xl sm:text-7xl font-black text-white tracking-tight mb-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black text-white tracking-tight mb-6">
             Run<span className="text-[#fc4c02]">Cher</span>
           </h1>
 
-          <p className="text-xl sm:text-2xl text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-lg sm:text-xl lg:text-2xl text-slate-300 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed">
             {t('home.tagline')}
           </p>
 
           {user ? (
             <Link
               to="/tournaments"
-              className="inline-flex items-center gap-2 bg-[#fc4c02] hover:bg-[#e04400] text-white font-bold text-lg px-8 py-4 rounded-2xl transition-colors shadow-lg shadow-orange-900/30"
+              className="inline-flex items-center gap-2 bg-[#fc4c02] hover:bg-[#e04400] text-white font-bold text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-colors shadow-lg shadow-orange-900/30"
             >
               {t('home.viewTournaments')}
             </Link>
           ) : (
             <a
               href={stravaLoginUrl()}
-              className="inline-flex items-center gap-3 bg-[#fc4c02] hover:bg-[#e04400] text-white font-bold text-lg px-8 py-4 rounded-2xl transition-colors shadow-lg shadow-orange-900/30"
+              className="inline-flex items-center gap-3 bg-[#fc4c02] hover:bg-[#e04400] text-white font-bold text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-colors shadow-lg shadow-orange-900/30"
             >
-              <StravaIcon size={24} />
+              <StravaIcon size={22} />
               {t('home.loginWithStrava')}
             </a>
           )}
@@ -73,11 +73,11 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-black text-gray-900 text-center mb-14">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
+        <h2 className="text-2xl sm:text-3xl font-black text-gray-900 text-center mb-10 sm:mb-14">
           {t('home.howItWorks')}
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
           {steps.map(({ step, icon, title, desc }) => (
             <div key={step} className="relative">
               <div className="text-6xl font-black text-gray-100 absolute -top-4 -left-2 select-none">
@@ -95,34 +95,40 @@ export default function Home() {
 
       {/* Scoring */}
       <section className="bg-slate-900 text-white">
-        <div className="max-w-6xl mx-auto px-6 py-20">
-          <h2 className="text-3xl font-black text-center mb-14">{t('home.scoringTitle')}</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
+          <h2 className="text-2xl sm:text-3xl font-black text-center mb-10 sm:mb-14">
+            {t('home.scoringTitle')}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 items-center">
             <div>
-              <div className="bg-slate-800 rounded-2xl p-8 text-center mb-6">
+              <div className="bg-slate-800 rounded-2xl p-6 sm:p-8 text-center mb-4 sm:mb-6">
                 <p className="text-slate-400 text-sm mb-3">{t('home.perSegment')}</p>
-                <p className="text-3xl font-mono font-bold text-[#fc4c02]">
+                <p className="text-2xl sm:text-3xl font-mono font-bold text-[#fc4c02]">
                   (T<sub>leader</sub> / T<sub>you</sub>) × 100
                 </p>
                 <p className="text-slate-400 text-sm mt-3">{t('home.genderSplit')}</p>
               </div>
-              <div className="bg-slate-800 rounded-2xl p-8 text-center">
+              <div className="bg-slate-800 rounded-2xl p-6 sm:p-8 text-center">
                 <p className="text-slate-400 text-sm mb-3">{t('home.completionBonus')}</p>
-                <p className="text-3xl font-mono font-bold text-green-400">N × (11 − place)</p>
+                <p className="text-2xl sm:text-3xl font-mono font-bold text-green-400">
+                  N × (11 − place)
+                </p>
                 <p className="text-slate-400 text-sm mt-3">{t('home.first10')}</p>
               </div>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {places.map(({ place, formula, ex }) => (
                 <div
                   key={place}
-                  className="bg-slate-800 rounded-xl p-4 flex items-center justify-between"
+                  className="bg-slate-800 rounded-xl p-4 flex items-center justify-between gap-2"
                 >
-                  <div>
+                  <div className="min-w-0">
                     <p className="font-semibold">{place}</p>
-                    <p className="text-slate-400 text-xs mt-0.5">{ex}</p>
+                    <p className="text-slate-400 text-xs mt-0.5 truncate">{ex}</p>
                   </div>
-                  <span className="text-[#fc4c02] font-mono font-bold text-sm">{formula}</span>
+                  <span className="text-[#fc4c02] font-mono font-bold text-sm shrink-0">
+                    {formula}
+                  </span>
                 </div>
               ))}
             </div>
@@ -132,12 +138,14 @@ export default function Home() {
 
       {/* CTA */}
       {!user && (
-        <section className="max-w-6xl mx-auto px-6 py-20 text-center">
-          <h2 className="text-3xl font-black text-gray-900 mb-4">{t('home.readyToStart')}</h2>
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20 text-center">
+          <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-4">
+            {t('home.readyToStart')}
+          </h2>
           <p className="text-gray-500 mb-8">{t('home.loginCta')}</p>
           <a
             href={stravaLoginUrl()}
-            className="inline-flex items-center gap-3 bg-[#fc4c02] hover:bg-[#e04400] text-white font-bold text-lg px-8 py-4 rounded-2xl transition-colors"
+            className="inline-flex items-center gap-3 bg-[#fc4c02] hover:bg-[#e04400] text-white font-bold text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-colors"
           >
             <StravaIcon size={22} />
             {t('home.loginWithStrava')}

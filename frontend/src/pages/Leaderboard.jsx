@@ -33,22 +33,24 @@ export default function Leaderboard() {
 
   return (
     <Layout>
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <Link
           to={`/tournaments/${id}`}
           className="text-sm text-gray-400 hover:text-gray-600 mb-4 inline-block"
         >
           {t('leaderboard.back')}
         </Link>
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <h1 className="text-3xl font-black text-gray-900">{t('leaderboard.title')}</h1>
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <h1 className="text-2xl sm:text-3xl font-black text-gray-900">
+            {t('leaderboard.title')}
+          </h1>
 
           <div className="flex items-center bg-white border border-gray-200 rounded-xl p-1 gap-1">
             {genderTabs.map(({ key, label }) => (
               <button
                 key={key}
                 onClick={() => setGender(key)}
-                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
                   gender === key ? 'bg-[#fc4c02] text-white' : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -75,7 +77,7 @@ export default function Leaderboard() {
           {/* Main leaderboard */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-100">
+              <div className="px-4 sm:px-6 py-4 border-b border-gray-100">
                 <h2 className="font-bold text-gray-900">{t('leaderboard.overall')}</h2>
               </div>
 
@@ -89,11 +91,11 @@ export default function Leaderboard() {
                   {rankings.map((p, i) => (
                     <div
                       key={p.user_id}
-                      className={`flex items-center gap-4 px-6 py-4 ${i === 0 ? 'bg-orange-50/60' : ''}`}
+                      className={`flex items-center gap-3 px-3 sm:px-6 py-3 sm:py-4 ${i === 0 ? 'bg-orange-50/60' : ''}`}
                     >
-                      <div className="w-8 text-center flex-shrink-0">
+                      <div className="w-7 sm:w-8 text-center flex-shrink-0">
                         {i < 3 ? (
-                          <span className="text-2xl">{MEDALS[i]}</span>
+                          <span className="text-xl sm:text-2xl">{MEDALS[i]}</span>
                         ) : (
                           <span className="text-sm font-bold text-gray-400">{p.rank}</span>
                         )}
@@ -103,16 +105,18 @@ export default function Leaderboard() {
                         <img
                           src={p.profile_picture}
                           alt={p.full_name}
-                          className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                          className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover flex-shrink-0"
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold flex-shrink-0">
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold flex-shrink-0 text-sm">
                           {p.full_name[0]}
                         </div>
                       )}
 
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-gray-900 truncate">{p.full_name}</p>
+                        <p className="font-semibold text-gray-900 truncate text-sm sm:text-base">
+                          {p.full_name}
+                        </p>
                         <p className="text-xs text-gray-400">
                           {p.gender === 'female' ? '♀' : '♂'}
                           {p.completion_order && (
@@ -124,7 +128,7 @@ export default function Leaderboard() {
                       </div>
 
                       <div className="text-right flex-shrink-0">
-                        <p className="font-bold text-gray-900 text-lg">
+                        <p className="font-bold text-gray-900 text-base sm:text-lg">
                           {p.overall_score.toFixed(1)}
                         </p>
                         <p className="text-xs text-gray-400">
@@ -147,7 +151,7 @@ export default function Leaderboard() {
           {/* Segment leaders */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-              <div className="px-5 py-4 border-b border-gray-100">
+              <div className="px-4 sm:px-5 py-4 border-b border-gray-100">
                 <h2 className="font-bold text-gray-900">{t('leaderboard.segmentLeaders')}</h2>
                 <p className="text-xs text-gray-400 mt-0.5">{t('leaderboard.ratedInOrder')}</p>
               </div>
@@ -159,7 +163,7 @@ export default function Leaderboard() {
               ) : (
                 <div className="divide-y divide-gray-50">
                   {segmentLeaders.map((seg) => (
-                    <div key={seg.segment_id} className="px-5 py-4">
+                    <div key={seg.segment_id} className="px-4 sm:px-5 py-4">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="w-5 h-5 bg-orange-500 text-white text-xs font-bold rounded-full flex items-center justify-center flex-shrink-0">
                           {seg.order_number}
@@ -170,8 +174,8 @@ export default function Leaderboard() {
                       </div>
                       {seg.leader ? (
                         <div className="flex items-center justify-between text-xs text-gray-500">
-                          <span>🏅 {seg.leader.full_name}</span>
-                          <span className="font-mono font-semibold text-gray-700">
+                          <span className="truncate mr-2">🏅 {seg.leader.full_name}</span>
+                          <span className="font-mono font-semibold text-gray-700 shrink-0">
                             {fmtTime(seg.leader.elapsed_time)}
                           </span>
                         </div>
