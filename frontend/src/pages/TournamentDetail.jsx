@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Layout from '../components/Layout'
 import Spinner from '../components/Spinner'
+import SegmentMap from '../components/SegmentMap'
 import { useApi } from '../hooks/useApi'
 import { useAuth } from '../contexts/AuthContext'
 import { api } from '../api/client'
@@ -177,6 +178,9 @@ export default function TournamentDetail() {
           ✅ {t('detail.participantBanner')}
         </div>
       )}
+
+      {/* Map */}
+      <SegmentMap segments={segments} />
 
       {/* Segments */}
       <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">

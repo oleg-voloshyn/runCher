@@ -12,7 +12,9 @@
     "format": "prettier --write src"
   },
   "dependencies": {
+    "@mapbox/polyline": "^1.2.1",
     "i18next": "^26.0.8",
+    "leaflet": "^1.9.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-i18next": "^17.0.6",

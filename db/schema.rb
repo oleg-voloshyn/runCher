@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_01_180726) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_02_101809) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -56,6 +56,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_180726) do
     t.float "end_longitude"
     t.float "maximum_grade"
     t.string "name"
+    t.text "polyline"
     t.float "start_latitude"
     t.float "start_longitude"
     t.string "strava_id"

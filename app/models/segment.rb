@@ -25,7 +25,8 @@ class Segment < ApplicationRecord
         start_latitude:  segment_data.start_latlng&.lat,
         start_longitude: segment_data.start_latlng&.lng,
         end_latitude:    segment_data.end_latlng&.lat,
-        end_longitude:   segment_data.end_latlng&.lng
+        end_longitude:   segment_data.end_latlng&.lng,
+        polyline:        segment_data.map&.polyline
       )
       seg.save!
     end

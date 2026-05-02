@@ -103,14 +103,20 @@ module Api
 
         if detail
           json[:segments] = t.all_tournament_segments.map do |ts|
+            seg = ts.segment
             {
-              id:          ts.segment.id,
-              strava_id:   ts.segment.strava_id,
-              name:        ts.segment.name,
-              distance:    ts.segment.distance,
-              # is_rated and order_number are hidden from regular participants
-              is_rated:    current_user.moderator? ? ts.is_rated : nil,
-              order_number: current_user.moderator? ? ts.order_number : nil
+              id:              seg.id,
+              strava_id:       seg.strava_id,
+              name:            seg.name,
+              distance:        seg.distance,
+              average_grade:   seg.average_grade,
+              start_latitude:  seg.start_latitude,
+              start_longitude: seg.start_longitude,
+              end_latitude:    seg.end_latitude,
+              end_longitude:   seg.end_longitude,
+              polyline:        seg.polyline,
+              is_rated:        current_user.moderator? ? ts.is_rated : nil,
+              order_number:    current_user.moderator? ? ts.order_number : nil
             }.compact
           end
         end
