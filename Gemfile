@@ -17,6 +17,7 @@ gem "puma", ">= 5.0"
 # Tailwind CSS
 gem "tailwindcss-rails"
 gem 'strava-ruby-client'
+gem 'slim-rails'
 gem 'dotenv-rails', groups: [:development, :test]
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]

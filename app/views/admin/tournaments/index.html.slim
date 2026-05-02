@@ -1,0 +1,43 @@
+- content_for :page_title, "Турніри"
+
+.flex.items-center.justify-between.mb-6
+  p.text-sm.text-gray-500 = "#{@tournaments.size} турнірів"
+  = link_to "＋ Новий турнір", new_admin_tournament_path, class: "bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+
+.bg-white.rounded-xl.shadow-sm.border.border-gray-200.overflow-hidden
+  table.w-full.text-sm
+    thead
+      tr.bg-gray-50.border-b.border-gray-100.text-left
+        th.px-6.py-3.font-semibold.text-gray-600 Назва
+        th.px-6.py-3.font-semibold.text-gray-600 Статус
+        th.px-6.py-3.font-semibold.text-gray-600 Сегменти
+        th.px-6.py-3.font-semibold.text-gray-600 Учасники
+        th.px-6.py-3.font-semibold.text-gray-600 Дати
+        th.px-6.py-3
+    tbody.divide-y.divide-gray-50
+      - @tournaments.each do |t|
+        tr.hover:bg-gray-50.transition-colors
+          td.px-6.py-4
+            = link_to t.name, admin_tournament_path(t), class: "font-medium text-gray-900 hover:text-orange-500"
+            p.text-xs.text-gray-400.mt-0.5.truncate.max-w-xs = t.description
+          td.px-6.py-4 = status_badge(t.status)
+          td.px-6.py-4
+            span.text-gray-900 = "#{t.total_segments_count} всього"
+            span.text-gray-400 = " / #{t.rated_segments_count} рейтинг."
+          td.px-6.py-4.text-gray-700 = t.tournament_participants.size
+          td.px-6.py-4.text-gray-500.text-xs
+            - if t.starts_at
+              = t.starts_at.strftime('%d.%m.%Y')
+              - if t.ends_at
+                = " — #{t.ends_at.strftime('%d.%m.%Y')}"
+            - else
+              | —
+          td.px-6.py-4.text-right
+            .flex.items-center.justify-end.gap-2
+              = link_to "Деталі",    admin_tournament_path(t),      class: "text-xs text-gray-500 hover:text-gray-800"
+              = link_to "Редагувати", edit_admin_tournament_path(t), class: "text-xs text-blue-500 hover:text-blue-700"
+      - if @tournaments.empty?
+        tr
+          td.px-6.py-10.text-center.text-gray-400 colspan="6"
+            | Немає турнірів.&#32;
+            = link_to "Створити перший", new_admin_tournament_path, class: "text-orange-500 hover:underline"

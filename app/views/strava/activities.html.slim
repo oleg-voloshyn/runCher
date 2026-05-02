@@ -1,0 +1,17 @@
+h1 Your Activities
+
+h2 Athlete Profile
+p
+  | Name:&#32;
+  = "#{@athlete.firstname} #{@athlete.lastname}"
+p
+  | City:&#32;
+  = @athlete.city
+
+h2 Activities
+ul.divide-y.divide-gray-200
+  - @activities.each do |activity|
+    li.py-4.flex.items-center
+      .ml-3
+        p.text-sm.font-medium.text-gray-900 = activity.name
+        p.text-sm.text-gray-500 = "#{activity.distance} meters"

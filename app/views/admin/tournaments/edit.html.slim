@@ -1,0 +1,5 @@
+- content_for :page_title, "Редагувати: #{@tournament.name}"
+
+.max-w-2xl
+  .bg-white.rounded-xl.shadow-sm.border.border-gray-200.p-6
+    = render 'form', tournament: @tournament
