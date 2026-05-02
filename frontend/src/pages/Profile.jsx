@@ -42,7 +42,7 @@ export default function Profile() {
   if (!user) return <Navigate to="/" replace />
 
   const myTournaments = (tournaments || []).filter((t) => t.joined)
-  const syncOnCooldown = nextSyncAt && nextSyncAt > new Date()
+  const syncOnCooldown = !user?.role?.match(/admin|moderator/) && nextSyncAt && nextSyncAt > new Date()
 
   async function handleSync() {
     setSyncing(true)
