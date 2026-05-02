@@ -49,14 +49,14 @@ module Api
 
         summary_list = client.athlete_activities(per_page: 200, after: after_time.to_i)
 
-        all_types = summary_list.map { |a| a.respond_to?(:sport_type) ? a.sport_type.to_s : a['type'].to_s }
+        all_types = summary_list.map { |a| a.respond_to?(:sport_type) ? a.sport_type.to_s : a.type.to_s }
         Rails.logger.info "Sync user=#{current_user.id} after=#{after_time} total=#{summary_list.size} types=#{all_types.tally}"
 
         run_ids = summary_list.filter_map do |a|
-          activity_type = a.respond_to?(:sport_type) ? a.sport_type.to_s : a['type'].to_s
+          activity_type = a.respond_to?(:sport_type) ? a.sport_type.to_s : a.type.to_s
           next if activity_type != 'Run'
-          next if Activity.exists?(strava_activity_id: a['id'].to_s, processed: true)
-          a['id'].to_s
+          next if Activity.exists?(strava_activity_id: a.id.to_s, processed: true)
+          a.id.to_s
         end
 
         processed_count = 0
@@ -69,25 +69,25 @@ module Api
           unless activity.persisted?
             activity.assign_attributes(
               user:          current_user,
-              name:          detail['name'],
-              activity_type: detail['type'],
-              start_date:    detail['start_date'],
-              elapsed_time:  detail['elapsed_time'],
-              distance:      detail['distance']
+              name:          detail.name,
+              activity_type: detail.respond_to?(:sport_type) ? detail.sport_type.to_s : detail.type.to_s,
+              start_date:    detail.start_date,
+              elapsed_time:  detail.elapsed_time,
+              distance:      detail.distance
             )
             activity.save!
           end
 
-          Array(detail['segment_efforts']).each do |effort_data|
-            segment = Segment.find_by(strava_id: effort_data['segment']['id'].to_s)
+          Array(detail.segment_efforts).each do |effort_data|
+            segment = Segment.find_by(strava_id: effort_data.segment.id.to_s)
             next unless segment
 
-            SegmentEffort.find_or_create_by(strava_effort_id: effort_data['id'].to_s) do |e|
+            SegmentEffort.find_or_create_by(strava_effort_id: effort_data.id.to_s) do |e|
               e.user         = current_user
               e.segment      = segment
               e.activity     = activity
-              e.elapsed_time = effort_data['elapsed_time']
-              e.start_date   = effort_data['start_date']
+              e.elapsed_time = effort_data.elapsed_time
+              e.start_date   = effort_data.start_date
             end
           end
 
