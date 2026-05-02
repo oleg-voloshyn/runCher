@@ -92,6 +92,10 @@
     "nextSyncAt": "Наступна синхронізація доступна о",
     "segments": "сегментів",
     "participants": "учасників",
-    "leaderboard": "Рейтинг →"
+    "leaderboard": "Рейтинг →",
+    "myActivities": "Мої пробіжки",
+    "noActivities": "Пробіжок ще немає — синхронізуйте Strava",
+    "segmentsMatched": "сег.",
+    "noSegments": "без сегментів"
   }
 }

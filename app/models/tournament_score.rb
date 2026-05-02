@@ -15,7 +15,7 @@ class TournamentScore < ApplicationRecord
     active_tournament_segments = TournamentSegment
       .joins(:tournament)
       .where(segment: effort.segment, tournaments: { status: 'active' })
-      .where('tournaments.starts_at <= ? AND (tournaments.ends_at IS NULL OR tournaments.ends_at >= ?)', Time.current, Time.current)
+      .where('(tournaments.starts_at IS NULL OR tournaments.starts_at <= ?) AND (tournaments.ends_at IS NULL OR tournaments.ends_at >= ?)', Time.current, Time.current)
       .includes(:tournament)
 
     active_tournament_segments.each do |ts|

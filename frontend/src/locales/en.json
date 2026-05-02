@@ -92,6 +92,10 @@
     "nextSyncAt": "Next sync available at",
     "segments": "segments",
     "participants": "participants",
-    "leaderboard": "Leaderboard →"
+    "leaderboard": "Leaderboard →",
+    "myActivities": "My runs",
+    "noActivities": "No runs yet — sync Strava first",
+    "segmentsMatched": "seg.",
+    "noSegments": "no segments"
   }
 }

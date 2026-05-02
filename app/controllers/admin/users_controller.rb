@@ -1,7 +1,7 @@
 module Admin
   class UsersController < BaseController
-    before_action :require_admin!, only: [:update_role]
-    before_action :set_user, only: [:show, :update_role]
+    before_action :require_admin!, only: [:update_role, :reprocess_activities, :reset_sync]
+    before_action :set_user, only: [:show, :update_role, :reprocess_activities, :reset_sync]
 
     def index
       @users = User.order(created_at: :desc)
@@ -11,6 +11,18 @@ module Admin
 
     def show
       @participations = @user.tournament_participants.includes(:tournament).order(created_at: :desc)
+    end
+
+    def reprocess_activities
+      unprocessed = @user.activities.where(processed: false)
+      count = unprocessed.count
+      unprocessed.each { |a| SyncStravaActivityJob.perform_later(@user.id, a.strava_activity_id) }
+      redirect_to admin_user_path(@user), notice: "Поставлено в чергу #{count} активностей для повторної обробки"
+    end
+
+    def reset_sync
+      @user.update_column(:last_synced_at, nil)
+      redirect_to admin_user_path(@user), notice: "last_synced_at скинуто — наступний синк завантажить всі активності з дати старту турніру"
     end
 
     def update_role

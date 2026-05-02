@@ -5,15 +5,26 @@ class SyncStravaActivityJob < ApplicationJob
     user = User.find_by(id: user_id)
     return unless user
 
-    user.ensure_fresh_token!
+    existing = Activity.find_by(strava_activity_id: strava_activity_id)
+    return if existing&.processed?
 
+    user.ensure_fresh_token!
     client = Strava::Api::Client.new(access_token: user.access_token)
     data   = client.activity(strava_activity_id)
 
-    activity = Activity.sync_from_strava(user, data)
-    return unless activity  # already processed
+    activity = existing || Activity.new(strava_activity_id: strava_activity_id)
+    unless activity.persisted?
+      activity.assign_attributes(
+        user:          user,
+        name:          data['name'],
+        activity_type: data['type'],
+        start_date:    data['start_date'],
+        elapsed_time:  data['elapsed_time'],
+        distance:      data['distance']
+      )
+      activity.save!
+    end
 
-    # Pull segment efforts from the activity detail
     Array(data['segment_efforts']).each do |effort_data|
       segment = Segment.find_by(strava_id: effort_data['segment']['id'].to_s)
       next unless segment
@@ -29,6 +40,9 @@ class SyncStravaActivityJob < ApplicationJob
 
     activity.update!(processed: true)
   rescue Strava::Errors::Fault => e
-    Rails.logger.error "SyncStravaActivityJob failed for user #{user_id}, activity #{strava_activity_id}: #{e.message}"
+    Rails.logger.error "SyncStravaActivityJob failed (Strava) for user #{user_id}, activity #{strava_activity_id}: #{e.message}"
+  rescue StandardError => e
+    Rails.logger.error "SyncStravaActivityJob failed for user #{user_id}, activity #{strava_activity_id}: #{e.class}: #{e.message}"
+    raise
   end
 end

@@ -13,6 +13,20 @@ const STATUS_COLORS = {
   completed: 'bg-blue-100 text-blue-700',
 }
 
+function formatDistance(meters) {
+  if (!meters) return '—'
+  return (meters / 1000).toFixed(2) + ' km'
+}
+
+function formatDuration(seconds) {
+  if (!seconds) return '—'
+  const h = Math.floor(seconds / 3600)
+  const m = Math.floor((seconds % 3600) / 60)
+  const s = seconds % 60
+  if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
+  return `${m}:${String(s).padStart(2, '0')}`
+}
+
 export default function Profile() {
   const { user } = useAuth()
   const { t, i18n } = useTranslation()
@@ -21,7 +35,8 @@ export default function Profile() {
   const [nextSyncAt, setNextSyncAt] = useState(() =>
     user?.next_sync_at ? new Date(user.next_sync_at) : null
   )
-  const { data: tournaments, loading } = useApi(() => api.getTournaments())
+  const { data: tournaments, loading: loadingTournaments } = useApi(() => api.getTournaments())
+  const { data: activities, loading: loadingActivities } = useApi(() => api.getActivities())
   const locale = i18n.language === 'uk' ? 'uk-UA' : 'en-GB'
 
   if (!user) return <Navigate to="/" replace />
@@ -96,14 +111,15 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* My tournaments */}
-        <div className="lg:col-span-2">
+        {/* Right column */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* My tournaments */}
           <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
             <div className="px-4 sm:px-6 py-4 border-b border-gray-100">
               <h2 className="font-bold text-gray-900">{t('profile.myTournaments')}</h2>
             </div>
 
-            {loading ? (
+            {loadingTournaments ? (
               <div className="flex justify-center py-10">
                 <Spinner />
               </div>
@@ -153,6 +169,53 @@ export default function Profile() {
                       >
                         {t('profile.leaderboard')}
                       </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* My activities */}
+          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+            <div className="px-4 sm:px-6 py-4 border-b border-gray-100">
+              <h2 className="font-bold text-gray-900">{t('profile.myActivities')}</h2>
+            </div>
+
+            {loadingActivities ? (
+              <div className="flex justify-center py-10">
+                <Spinner />
+              </div>
+            ) : !activities || activities.length === 0 ? (
+              <div className="px-6 py-10 text-center text-gray-400">
+                <p className="text-3xl mb-2">🏃</p>
+                <p className="font-medium text-sm">{t('profile.noActivities')}</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-50">
+                {activities.map((activity) => (
+                  <div key={activity.id} className="px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-gray-900 truncate">{activity.name}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        {new Date(activity.start_date).toLocaleDateString(locale, {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                        })}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-4 shrink-0 text-xs text-gray-500">
+                      <span className="hidden sm:inline">{formatDistance(activity.distance)}</span>
+                      <span className="hidden sm:inline text-gray-300">·</span>
+                      <span className="hidden sm:inline">{formatDuration(activity.elapsed_time)}</span>
+                      {activity.matched_segments_count > 0 ? (
+                        <span className="inline-flex items-center gap-1 bg-orange-50 text-[#fc4c02] font-semibold px-2 py-0.5 rounded-full">
+                          🏅 {activity.matched_segments_count} {t('profile.segmentsMatched')}
+                        </span>
+                      ) : (
+                        <span className="text-gray-300">{t('profile.noSegments')}</span>
+                      )}
                     </div>
                   </div>
                 ))}

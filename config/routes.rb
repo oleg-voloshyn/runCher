@@ -22,7 +22,11 @@ Rails.application.routes.draw do
     end
     resources :segments, only: [:index, :show, :new, :create, :destroy]
     resources :users,    only: [:index, :show] do
-      member { patch :update_role }
+      member do
+        patch :update_role
+        post  :reprocess_activities
+        post  :reset_sync
+      end
     end
   end
 
@@ -56,7 +60,8 @@ Rails.application.routes.draw do
       get  'strava/webhook', to: 'strava_webhook#verify'
       post 'strava/webhook', to: 'strava_webhook#receive'
 
-      # Manual activity sync
+      # Activities
+      get  'activities',      to: 'activities#index'
       post 'sync_activities', to: 'activities#sync'
     end
   end

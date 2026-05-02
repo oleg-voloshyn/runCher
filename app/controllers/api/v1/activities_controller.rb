@@ -5,6 +5,25 @@ module Api
       # Fetches recent activities from Strava and enqueues processing jobs.
       SYNC_COOLDOWN = 6.hours
 
+      def index
+        activities = current_user.activities
+          .where(processed: true)
+          .order(start_date: :desc)
+          .limit(50)
+          .includes(:segment_efforts)
+
+        render json: activities.map { |a|
+          {
+            id:                    a.id,
+            name:                  a.name,
+            start_date:            a.start_date,
+            distance:              a.distance,
+            elapsed_time:          a.elapsed_time,
+            matched_segments_count: a.segment_efforts.size
+          }
+        }
+      end
+
       def sync
         next_sync_at = current_user.last_synced_at && current_user.last_synced_at + SYNC_COOLDOWN
         if next_sync_at && next_sync_at > Time.current
@@ -34,7 +53,7 @@ module Api
         activities.each do |a|
           activity_type = a.respond_to?(:sport_type) ? a.sport_type : a['type']
           next unless activity_type == 'Run'
-          next if Activity.exists?(strava_activity_id: a['id'].to_s)
+          next if Activity.exists?(strava_activity_id: a['id'].to_s, processed: true)
 
           SyncStravaActivityJob.perform_later(current_user.id, a['id'].to_s)
           enqueued += 1

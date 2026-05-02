@@ -35,6 +35,9 @@ export const api = {
   // Segments
   getSegments: () => request('/segments'),
 
+  // Activities
+  getActivities: () => request('/activities'),
+
   // Sync
   syncActivities: () => request('/sync_activities', { method: 'POST' }),
 }
