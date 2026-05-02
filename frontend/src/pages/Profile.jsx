@@ -35,8 +35,9 @@ export default function Profile() {
   const [nextSyncAt, setNextSyncAt] = useState(() =>
     user?.next_sync_at ? new Date(user.next_sync_at) : null
   )
+  const [activitiesKey, setActivitiesKey] = useState(0)
   const { data: tournaments, loading: loadingTournaments } = useApi(() => api.getTournaments())
-  const { data: activities, loading: loadingActivities } = useApi(() => api.getActivities())
+  const { data: activities, loading: loadingActivities } = useApi(() => api.getActivities(), [activitiesKey])
   const locale = i18n.language === 'uk' ? 'uk-UA' : 'en-GB'
 
   if (!user) return <Navigate to="/" replace />
@@ -51,6 +52,7 @@ export default function Profile() {
       const res = await api.syncActivities()
       setSyncMsg(res.message)
       if (res.next_sync_at) setNextSyncAt(new Date(res.next_sync_at))
+      if (res.debug?.run_ids_count > 0) setActivitiesKey((k) => k + 1)
     } catch (e) {
       setSyncMsg(e.message)
     } finally {
