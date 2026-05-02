@@ -1,0 +1,136 @@
+uk:
+  admin:
+    nav:
+      tournaments: Турніри
+      segments: Сегменти
+      users: Користувачі
+      logout: Вийти
+      back_to_site: "← Назад на сайт"
+    shared:
+      all_link: "Всі →"
+      details: Деталі
+      edit: Редагувати
+      delete: Видалити
+      cancel: Скасувати
+      add: Додати
+      save: Зберегти зміни
+      total: всього
+      rated_short: "рейтинг."
+      participants_count: учасників
+      no_data: "—"
+    status:
+      draft: Чернетка
+      active: Активний
+      completed: Завершений
+    gender:
+      male: Чоловік
+      female: Жінка
+    role:
+      admin: Admin
+      moderator: Moderator
+      user: User
+    dashboard:
+      title: Dashboard
+      stat_tournaments: Турніри
+      stat_segments: Сегменти
+      stat_users: Користувачі
+      stat_activities: Активності
+      stat_active: активних
+      stat_in_db: в базі
+      stat_registered: зареєстровано
+      stat_from_strava: зі Strava
+      recent_tournaments: Останні турніри
+      recent_users: Нові користувачі
+      no_tournaments: Немає турнірів
+      no_users: Немає користувачів
+    segments:
+      title: Сегменти
+      search_placeholder: Пошук за назвою...
+      add_from_strava: "＋ Додати зі Strava"
+      col_name: Назва
+      col_distance: Дистанція
+      col_grade: "Ухил (сер.)"
+      col_strava_id: Strava ID
+      empty_html: "Немає сегментів. <a href='%{link}' class='text-orange-500 hover:underline'>Додати перший зі Strava</a>"
+      new_title: Додати сегмент зі Strava
+      new_description_html: "Знайдіть сегмент на <a class='text-orange-500 hover:underline' href='https://www.strava.com/segments/explore' target='_blank'>Strava Segment Explorer</a>, скопіюйте його ID з URL (наприклад <code class='bg-gray-100 px-1 rounded text-xs'>strava.com/segments/<strong>12345678</strong></code>) і вставте нижче."
+      id_label: Strava Segment ID
+      id_placeholder: "24247007 або strava.com/segments/24247007"
+      fetch_and_save: Отримати та зберегти
+      confirm_delete: "Видалити сегмент «%{name}»?"
+    tournaments:
+      title: Турніри
+      count: "%{count} турнірів"
+      new_button: "＋ Новий турнір"
+      col_name: Назва
+      col_status: Статус
+      col_segments: Сегменти
+      col_participants: Учасники
+      col_dates: Дати
+      empty_html: "Немає турнірів. <a href='%{link}' class='text-orange-500 hover:underline'>Створити перший</a>"
+      new_title: Новий турнір
+      edit_title: "Редагувати: %{name}"
+      form_name: Назва турніру
+      form_name_placeholder: RunCher Spring 2025
+      form_description: Опис
+      form_description_placeholder: Опис турніру...
+      form_total_segments: Всього сегментів
+      form_rated_segments: Рейтингових сегментів
+      form_starts_at: Початок
+      form_ends_at: Кінець
+      create_button: Створити турнір
+      activate_button: "▶ Активувати"
+      complete_button: "✓ Завершити"
+      confirm_complete: "Завершити турнір та перерахувати бали?"
+      confirm_delete: "Видалити турнір «%{name}»?"
+      info_title: Інформація
+      info_description: Опис
+      info_segments: Сегменти
+      info_starts_at: Початок
+      info_ends_at: Кінець
+      info_participants: Учасники
+      info_of_total: "/ %{total} всього"
+      info_rated: "/ %{rated} рейтингових"
+      add_participant_title: Додати учасника
+      participant_user_label: Користувач
+      participant_user_prompt: Оберіть користувача...
+      participant_user_all_joined: Усі користувачі вже учасники
+      add_segment_title: Додати сегмент
+      segment_select_label: Сегмент
+      segment_select_prompt: Оберіть сегмент...
+      segment_all_added: Усі сегменти вже додані
+      segment_is_rated: Рейтинговий
+      segment_order_placeholder: Порядок
+      segments_table_title: "Сегменти турніру (%{count})"
+      col_rated: "Рейтинг."
+      col_order: Порядок
+      segments_empty: Сегменти ще не додані
+      participants_table_title: "Учасники (%{count})"
+      col_participant: Учасник
+      col_gender: Стать
+      col_score: Бали
+      col_bonus: Бонус
+      col_place: Місце
+      participants_empty: Немає учасників
+      confirm_remove_segment: Видалити сегмент?
+      confirm_remove_participant: "Видалити %{name} з турніру?"
+    users:
+      title: Користувачі
+      count: "%{count} користувачів"
+      search_placeholder: "Пошук за ім'ям або email..."
+      col_user: Користувач
+      col_gender: Стать
+      col_role: Роль
+      col_tournaments: Турніри
+      col_registered: Дата реєстрації
+      col_details: "Деталі →"
+      empty: Немає користувачів
+      show_strava_id: Strava ID
+      show_registered: Зареєстрований
+      show_tournaments: Турніри
+      show_change_role: Змінити роль
+      show_participations: Участь у турнірах
+      show_no_participations: Не бере участь у турнірах
+      col_score: Бали
+      col_bonus: Бонус
+      col_place: Місце

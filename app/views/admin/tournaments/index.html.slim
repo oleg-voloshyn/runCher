@@ -1,43 +1,42 @@
-- content_for :page_title, "Турніри"
+- content_for :page_title, t('admin.tournaments.title')
 
 .flex.items-center.justify-between.mb-6
-  p.text-sm.text-gray-500 = "#{@tournaments.size} турнірів"
-  = link_to "＋ Новий турнір", new_admin_tournament_path, class: "bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+  p.text-sm.text-gray-500 = t('admin.tournaments.count', count: @tournaments.size)
+  = link_to t('admin.tournaments.new_button'), new_admin_tournament_path, class: "bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
 
 .bg-white.rounded-xl.shadow-sm.border.border-gray-200.overflow-hidden
   table.w-full.text-sm
     thead
       tr.bg-gray-50.border-b.border-gray-100.text-left
-        th.px-6.py-3.font-semibold.text-gray-600 Назва
-        th.px-6.py-3.font-semibold.text-gray-600 Статус
-        th.px-6.py-3.font-semibold.text-gray-600 Сегменти
-        th.px-6.py-3.font-semibold.text-gray-600 Учасники
-        th.px-6.py-3.font-semibold.text-gray-600 Дати
+        th.px-6.py-3.font-semibold.text-gray-600 = t('admin.tournaments.col_name')
+        th.px-6.py-3.font-semibold.text-gray-600 = t('admin.tournaments.col_status')
+        th.px-6.py-3.font-semibold.text-gray-600 = t('admin.tournaments.col_segments')
+        th.px-6.py-3.font-semibold.text-gray-600 = t('admin.tournaments.col_participants')
+        th.px-6.py-3.font-semibold.text-gray-600 = t('admin.tournaments.col_dates')
         th.px-6.py-3
     tbody.divide-y.divide-gray-50
-      - @tournaments.each do |t|
+      - @tournaments.each do |t_item|
         tr.hover:bg-gray-50.transition-colors
           td.px-6.py-4
-            = link_to t.name, admin_tournament_path(t), class: "font-medium text-gray-900 hover:text-orange-500"
-            p.text-xs.text-gray-400.mt-0.5.truncate.max-w-xs = t.description
-          td.px-6.py-4 = status_badge(t.status)
+            = link_to t_item.name, admin_tournament_path(t_item), class: "font-medium text-gray-900 hover:text-orange-500"
+            p.text-xs.text-gray-400.mt-0.5.truncate.max-w-xs = t_item.description
+          td.px-6.py-4 = status_badge(t_item.status)
           td.px-6.py-4
-            span.text-gray-900 = "#{t.total_segments_count} всього"
-            span.text-gray-400 = " / #{t.rated_segments_count} рейтинг."
-          td.px-6.py-4.text-gray-700 = t.tournament_participants.size
+            span.text-gray-900 = "#{t_item.total_segments_count} #{t('admin.shared.total')}"
+            span.text-gray-400 = " / #{t_item.rated_segments_count} #{t('admin.shared.rated_short')}"
+          td.px-6.py-4.text-gray-700 = t_item.tournament_participants.size
           td.px-6.py-4.text-gray-500.text-xs
-            - if t.starts_at
-              = t.starts_at.strftime('%d.%m.%Y')
-              - if t.ends_at
-                = " — #{t.ends_at.strftime('%d.%m.%Y')}"
+            - if t_item.starts_at
+              = t_item.starts_at.strftime('%d.%m.%Y')
+              - if t_item.ends_at
+                = " — #{t_item.ends_at.strftime('%d.%m.%Y')}"
             - else
-              | —
+              = t('admin.shared.no_data')
           td.px-6.py-4.text-right
             .flex.items-center.justify-end.gap-2
-              = link_to "Деталі",    admin_tournament_path(t),      class: "text-xs text-gray-500 hover:text-gray-800"
-              = link_to "Редагувати", edit_admin_tournament_path(t), class: "text-xs text-blue-500 hover:text-blue-700"
+              = link_to t('admin.shared.details'),    admin_tournament_path(t_item),      class: "text-xs text-gray-500 hover:text-gray-800"
+              = link_to t('admin.shared.edit'), edit_admin_tournament_path(t_item), class: "text-xs text-blue-500 hover:text-blue-700"
       - if @tournaments.empty?
         tr
           td.px-6.py-10.text-center.text-gray-400 colspan="6"
-            | Немає турнірів.&#32;
-            = link_to "Створити перший", new_admin_tournament_path, class: "text-orange-500 hover:underline"
+            = t('admin.tournaments.empty_html', link: new_admin_tournament_path).html_safe

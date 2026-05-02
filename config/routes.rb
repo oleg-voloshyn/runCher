@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # Locale toggle
+  post 'locale', to: 'locales#set', as: :set_locale
+
   # Strava OAuth
   root to: 'spa#index'
   get  '/auth/strava/callback', to: 'sessions#create'

@@ -1,20 +1,20 @@
-- content_for :page_title, "Користувачі"
+- content_for :page_title, t('admin.users.title')
 
 .flex.items-center.justify-between.mb-6.gap-4.flex-wrap
   = form_with url: admin_users_path, method: :get, class: "flex-1 max-w-sm" do |f|
-    = f.search_field :q, value: params[:q], placeholder: "Пошук за ім'ям або email...",
+    = f.search_field :q, value: params[:q], placeholder: t('admin.users.search_placeholder'),
         class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-  p.text-sm.text-gray-400 = "#{@users.size} користувачів"
+  p.text-sm.text-gray-400 = t('admin.users.count', count: @users.size)
 
 .bg-white.rounded-xl.shadow-sm.border.border-gray-200.overflow-hidden
   table.w-full.text-sm
     thead
       tr.bg-gray-50.border-b.border-gray-100.text-left
-        th.px-6.py-3.font-semibold.text-gray-600 Користувач
-        th.px-6.py-3.font-semibold.text-gray-600 Стать
-        th.px-6.py-3.font-semibold.text-gray-600 Роль
-        th.px-6.py-3.font-semibold.text-gray-600.text-center Турніри
-        th.px-6.py-3.font-semibold.text-gray-600 Дата реєстрації
+        th.px-6.py-3.font-semibold.text-gray-600 = t('admin.users.col_user')
+        th.px-6.py-3.font-semibold.text-gray-600 = t('admin.users.col_gender')
+        th.px-6.py-3.font-semibold.text-gray-600 = t('admin.users.col_role')
+        th.px-6.py-3.font-semibold.text-gray-600.text-center = t('admin.users.col_tournaments')
+        th.px-6.py-3.font-semibold.text-gray-600 = t('admin.users.col_registered')
         th.px-6.py-3
     tbody.divide-y.divide-gray-50
       - @users.each do |u|
@@ -34,7 +34,7 @@
           td.px-6.py-3.text-center.text-gray-700 = u.tournament_participants.size
           td.px-6.py-3.text-gray-400.text-xs = u.created_at.strftime('%d.%m.%Y')
           td.px-6.py-3.text-right
-            = link_to "Деталі →", admin_user_path(u), class: "text-xs text-gray-500 hover:text-gray-800"
+            = link_to t('admin.users.col_details'), admin_user_path(u), class: "text-xs text-gray-500 hover:text-gray-800"
       - if @users.empty?
         tr
-          td.px-6.py-10.text-center.text-gray-400 colspan="6" Немає користувачів
+          td.px-6.py-10.text-center.text-gray-400 colspan="6" = t('admin.users.empty')

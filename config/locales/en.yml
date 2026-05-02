@@ -29,3 +29,138 @@
 
 en:
   hello: "Hello world"
+  admin:
+    nav:
+      tournaments: Tournaments
+      segments: Segments
+      users: Users
+      logout: Log out
+      back_to_site: "← Back to site"
+    shared:
+      all_link: "All →"
+      details: Details
+      edit: Edit
+      delete: Delete
+      cancel: Cancel
+      add: Add
+      save: Save changes
+      total: total
+      rated_short: "rated"
+      participants_count: participants
+      no_data: "—"
+    status:
+      draft: Draft
+      active: Active
+      completed: Completed
+    gender:
+      male: Male
+      female: Female
+    role:
+      admin: Admin
+      moderator: Moderator
+      user: User
+    dashboard:
+      title: Dashboard
+      stat_tournaments: Tournaments
+      stat_segments: Segments
+      stat_users: Users
+      stat_activities: Activities
+      stat_active: active
+      stat_in_db: in database
+      stat_registered: registered
+      stat_from_strava: from Strava
+      recent_tournaments: Recent tournaments
+      recent_users: New users
+      no_tournaments: No tournaments
+      no_users: No users
+    segments:
+      title: Segments
+      search_placeholder: Search by name...
+      add_from_strava: "＋ Add from Strava"
+      col_name: Name
+      col_distance: Distance
+      col_grade: "Grade (avg)"
+      col_strava_id: Strava ID
+      empty_html: "No segments. <a href='%{link}' class='text-orange-500 hover:underline'>Add the first from Strava</a>"
+      new_title: Add segment from Strava
+      new_description_html: "Find a segment on <a class='text-orange-500 hover:underline' href='https://www.strava.com/segments/explore' target='_blank'>Strava Segment Explorer</a>, copy its ID from the URL (e.g. <code class='bg-gray-100 px-1 rounded text-xs'>strava.com/segments/<strong>12345678</strong></code>) and paste it below."
+      id_label: Strava Segment ID
+      id_placeholder: "24247007 or strava.com/segments/24247007"
+      fetch_and_save: Fetch and save
+      confirm_delete: "Delete segment \"%{name}\"?"
+    tournaments:
+      title: Tournaments
+      count: "%{count} tournaments"
+      new_button: "＋ New tournament"
+      col_name: Name
+      col_status: Status
+      col_segments: Segments
+      col_participants: Participants
+      col_dates: Dates
+      empty_html: "No tournaments. <a href='%{link}' class='text-orange-500 hover:underline'>Create the first one</a>"
+      new_title: New tournament
+      edit_title: "Edit: %{name}"
+      form_name: Tournament name
+      form_name_placeholder: RunCher Spring 2025
+      form_description: Description
+      form_description_placeholder: Tournament description...
+      form_total_segments: Total segments
+      form_rated_segments: Rated segments
+      form_starts_at: Start date
+      form_ends_at: End date
+      create_button: Create tournament
+      activate_button: "▶ Activate"
+      complete_button: "✓ Complete"
+      confirm_complete: "Complete tournament and recalculate scores?"
+      confirm_delete: "Delete tournament \"%{name}\"?"
+      info_title: Information
+      info_description: Description
+      info_segments: Segments
+      info_starts_at: Start
+      info_ends_at: End
+      info_participants: Participants
+      info_of_total: "/ %{total} total"
+      info_rated: "/ %{rated} rated"
+      add_participant_title: Add participant
+      participant_user_label: User
+      participant_user_prompt: Select user...
+      participant_user_all_joined: All users already joined
+      add_segment_title: Add segment
+      segment_select_label: Segment
+      segment_select_prompt: Select segment...
+      segment_all_added: All segments already added
+      segment_is_rated: Rated
+      segment_order_placeholder: Order
+      segments_table_title: "Tournament segments (%{count})"
+      col_rated: "Rated"
+      col_order: Order
+      segments_empty: No segments added yet
+      participants_table_title: "Participants (%{count})"
+      col_participant: Participant
+      col_gender: Gender
+      col_score: Score
+      col_bonus: Bonus
+      col_place: Place
+      participants_empty: No participants
+      confirm_remove_segment: Remove segment?
+      confirm_remove_participant: "Remove %{name} from tournament?"
+    users:
+      title: Users
+      count: "%{count} users"
+      search_placeholder: "Search by name or email..."
+      col_user: User
+      col_gender: Gender
+      col_role: Role
+      col_tournaments: Tournaments
+      col_registered: Registered
+      col_details: "Details →"
+      empty: No users
+      show_strava_id: Strava ID
+      show_registered: Registered
+      show_tournaments: Tournaments
+      show_change_role: Change role
+      show_participations: Tournament participations
+      show_no_participations: Not participating in any tournaments
+      col_score: Score
+      col_bonus: Bonus
+      col_place: Place

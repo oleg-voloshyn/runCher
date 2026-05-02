@@ -16,18 +16,19 @@ module AdminHelper
       'active'    => 'bg-green-100 text-green-700',
       'completed' => 'bg-blue-100 text-blue-700'
     }
-    labels = { 'draft' => 'Чернетка', 'active' => 'Активний', 'completed' => 'Завершено' }
+    label = I18n.t("admin.status.#{status}", default: status)
     cls = "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold #{colors[status] || 'bg-gray-100 text-gray-600'}"
-    content_tag(:span, labels[status] || status, class: cls)
+    content_tag(:span, label, class: cls)
   end
 
   def role_badge(role)
     colors = { 'admin' => 'bg-red-100 text-red-700', 'moderator' => 'bg-purple-100 text-purple-700', 'user' => 'bg-gray-100 text-gray-600' }
+    label = I18n.t("admin.role.#{role}", default: role)
     cls = "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold #{colors[role] || 'bg-gray-100 text-gray-600'}"
-    content_tag(:span, role, class: cls)
+    content_tag(:span, label, class: cls)
   end
 
   def gender_label(gender)
-    gender == 'female' ? 'Жінки' : 'Чоловіки'
+    I18n.t("admin.gender.#{gender}", default: gender.to_s)
   end
 end

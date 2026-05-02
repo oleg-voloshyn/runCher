@@ -3,16 +3,16 @@
 .flex.items-start.gap-3.mb-6.flex-wrap
   = status_badge(@tournament.status)
   - if @tournament.status == 'draft'
-    = button_to "▶ Активувати", activate_admin_tournament_path(@tournament),
+    = button_to t('admin.tournaments.activate_button'), activate_admin_tournament_path(@tournament),
         method: :post, class: "bg-green-500 hover:bg-green-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
   - elsif @tournament.status == 'active'
-    = button_to "✓ Завершити", complete_admin_tournament_path(@tournament),
+    = button_to t('admin.tournaments.complete_button'), complete_admin_tournament_path(@tournament),
         method: :post, class: "bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors",
-        data: { turbo_confirm: "Завершити турнір та перерахувати бали?" }
-  = link_to "Редагувати", edit_admin_tournament_path(@tournament), class: "text-xs text-gray-500 hover:text-gray-800 border border-gray-300 rounded-lg px-3 py-1.5"
-  = button_to "Видалити", admin_tournament_path(@tournament), method: :delete,
+        data: { turbo_confirm: t('admin.tournaments.confirm_complete') }
+  = link_to t('admin.shared.edit'), edit_admin_tournament_path(@tournament), class: "text-xs text-gray-500 hover:text-gray-800 border border-gray-300 rounded-lg px-3 py-1.5"
+  = button_to t('admin.shared.delete'), admin_tournament_path(@tournament), method: :delete,
       class: "text-xs text-red-500 hover:text-red-700 border border-red-200 rounded-lg px-3 py-1.5",
-      data: { turbo_confirm: "Видалити турнір «#{@tournament.name}»?" }
+      data: { turbo_confirm: t('admin.tournaments.confirm_delete', name: @tournament.name) }
 
 .grid.grid-cols-1.lg:grid-cols-3.gap-6
 
@@ -20,80 +20,80 @@
 
     / Info card
     .bg-white.rounded-xl.shadow-sm.border.border-gray-200.p-5
-      h2.font-semibold.text-gray-800.mb-4 Інформація
+      h2.font-semibold.text-gray-800.mb-4 = t('admin.tournaments.info_title')
       dl.space-y-3.text-sm
         - if @tournament.description.present?
           div
-            dt.text-gray-500 Опис
+            dt.text-gray-500 = t('admin.tournaments.info_description')
             dd.text-gray-900.mt-0.5 = @tournament.description
         div
-          dt.text-gray-500 Сегменти
+          dt.text-gray-500 = t('admin.tournaments.info_segments')
           dd.text-gray-900.mt-0.5
-            = "#{@tournament_segments.size} / #{@tournament.total_segments_count} всього"
+            = "#{@tournament_segments.size} #{t('admin.tournaments.info_of_total', total: @tournament.total_segments_count)}"
             br
-            span.text-orange-600 = "#{@tournament_segments.count(&:is_rated)} / #{@tournament.rated_segments_count} рейтингових"
+            span.text-orange-600 = "#{@tournament_segments.count(&:is_rated)} #{t('admin.tournaments.info_rated', rated: @tournament.rated_segments_count)}"
         - if @tournament.starts_at
           div
-            dt.text-gray-500 Початок
+            dt.text-gray-500 = t('admin.tournaments.info_starts_at')
             dd.text-gray-900.mt-0.5 = @tournament.starts_at.strftime('%d.%m.%Y %H:%M')
         - if @tournament.ends_at
           div
-            dt.text-gray-500 Кінець
+            dt.text-gray-500 = t('admin.tournaments.info_ends_at')
             dd.text-gray-900.mt-0.5 = @tournament.ends_at.strftime('%d.%m.%Y %H:%M')
         div
-          dt.text-gray-500 Учасники
+          dt.text-gray-500 = t('admin.tournaments.info_participants')
           dd.text-gray-900.mt-0.5 = @participants.size
 
     / Add participant form
     - if @tournament.status != 'completed'
       .bg-white.rounded-xl.shadow-sm.border.border-gray-200.p-5
-        h2.font-semibold.text-gray-800.mb-4 Додати учасника
+        h2.font-semibold.text-gray-800.mb-4 = t('admin.tournaments.add_participant_title')
         = form_with url: admin_tournament_tournament_participants_path(@tournament), method: :post, class: "space-y-3" do |f|
           div
-            label.block.text-xs.font-medium.text-gray-600.mb-1 Користувач
+            label.block.text-xs.font-medium.text-gray-600.mb-1 = t('admin.tournaments.participant_user_label')
             = select_tag 'tournament_participant[user_id]',
                 options_from_collection_for_select(@available_users, :id, :full_name),
-                prompt: (@available_users.any? ? 'Оберіть користувача...' : 'Усі користувачі вже учасники'),
+                prompt: (@available_users.any? ? t('admin.tournaments.participant_user_prompt') : t('admin.tournaments.participant_user_all_joined')),
                 disabled: @available_users.empty?,
                 class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 disabled:bg-gray-50 disabled:text-gray-400"
 
-          = f.submit "Додати", class: "w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium py-2 rounded-lg cursor-pointer transition-colors"
+          = f.submit t('admin.shared.add'), class: "w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium py-2 rounded-lg cursor-pointer transition-colors"
 
     / Add segment form
     - if @tournament.status != 'completed'
       .bg-white.rounded-xl.shadow-sm.border.border-gray-200.p-5
-        h2.font-semibold.text-gray-800.mb-4 Додати сегмент
+        h2.font-semibold.text-gray-800.mb-4 = t('admin.tournaments.add_segment_title')
         = form_with url: admin_tournament_tournament_segments_path(@tournament), method: :post, class: "space-y-3" do |f|
           div
-            label.block.text-xs.font-medium.text-gray-600.mb-1 Сегмент
+            label.block.text-xs.font-medium.text-gray-600.mb-1 = t('admin.tournaments.segment_select_label')
             = select_tag 'tournament_segment[segment_id]',
                 options_from_collection_for_select(@available_segments, :id, :name),
-                prompt: (@available_segments.any? ? 'Оберіть сегмент...' : 'Усі сегменти вже додані'),
+                prompt: (@available_segments.any? ? t('admin.tournaments.segment_select_prompt') : t('admin.tournaments.segment_all_added')),
                 disabled: @available_segments.empty?,
                 class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 disabled:bg-gray-50 disabled:text-gray-400"
           .flex.items-center.gap-3
             label.flex.items-center.gap-2.text-sm.text-gray-700.cursor-pointer
               = check_box_tag 'tournament_segment[is_rated]', '1', false, class: "rounded text-orange-500"
-              | Рейтинговий
+              = t('admin.tournaments.segment_is_rated')
             .flex-1
               = number_field_tag 'tournament_segment[order_number]', nil, min: 1,
-                  placeholder: "Порядок",
+                  placeholder: t('admin.tournaments.segment_order_placeholder'),
                   class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-          = f.submit "Додати", class: "w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium py-2 rounded-lg cursor-pointer transition-colors"
+          = f.submit t('admin.shared.add'), class: "w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium py-2 rounded-lg cursor-pointer transition-colors"
 
   .lg:col-span-2.space-y-4
 
     / Segments table
     .bg-white.rounded-xl.shadow-sm.border.border-gray-200.overflow-hidden
       .px-6.py-4.border-b.border-gray-100.flex.items-center.justify-between
-        h2.font-semibold.text-gray-800 = "Сегменти турніру (#{@tournament_segments.size})"
+        h2.font-semibold.text-gray-800 = t('admin.tournaments.segments_table_title', count: @tournament_segments.size)
       table.w-full.text-sm
         thead
           tr.bg-gray-50.border-b.border-gray-100.text-left
-            th.px-6.py-3.font-semibold.text-gray-600 Назва
-            th.px-6.py-3.font-semibold.text-gray-600 Дистанція
-            th.px-6.py-3.font-semibold.text-gray-600.text-center Рейтинг.
-            th.px-6.py-3.font-semibold.text-gray-600.text-center Порядок
+            th.px-6.py-3.font-semibold.text-gray-600 = t('admin.tournaments.col_name')
+            th.px-6.py-3.font-semibold.text-gray-600 = t('admin.segments.col_distance')
+            th.px-6.py-3.font-semibold.text-gray-600.text-center = t('admin.tournaments.col_rated')
+            th.px-6.py-3.font-semibold.text-gray-600.text-center = t('admin.tournaments.col_order')
             th.px-6.py-3
         tbody.divide-y.divide-gray-50
           - @tournament_segments.each do |ts|
@@ -109,7 +109,7 @@
                         onchange: "this.form.requestSubmit()"
                   td.px-6.py-3.text-center
                     = number_field_tag "tournament_segment[order_number]", ts.order_number,
-                        min: 1, placeholder: "—",
+                        min: 1, placeholder: t('admin.shared.no_data'),
                         class: "w-14 border border-gray-200 rounded px-2 py-1 text-sm text-center focus:outline-none focus:ring-2 focus:ring-orange-400",
                         onchange: "this.form.requestSubmit()"
               - else
@@ -117,30 +117,30 @@
                   - if ts.is_rated
                     span.inline-flex.w-5.h-5.bg-orange-500.rounded-full.text-white.text-xs.items-center.justify-center ✓
                   - else
-                    span.text-gray-300 —
-                td.px-6.py-3.text-center.text-gray-700.font-semibold = ts.order_number || '—'
+                    span.text-gray-300 = t('admin.shared.no_data')
+                td.px-6.py-3.text-center.text-gray-700.font-semibold = ts.order_number || t('admin.shared.no_data')
               td.px-6.py-3.text-right
                 - if @tournament.status != 'completed'
                   = button_to "✕", admin_tournament_tournament_segment_path(@tournament, ts),
                       method: :delete,
                       class: "text-xs text-red-400 hover:text-red-600 transition-colors",
-                      data: { turbo_confirm: "Видалити сегмент?" }
+                      data: { turbo_confirm: t('admin.tournaments.confirm_remove_segment') }
           - if @tournament_segments.empty?
             tr
-              td.px-6.py-6.text-center.text-gray-400.text-sm colspan="5" Сегменти ще не додані
+              td.px-6.py-6.text-center.text-gray-400.text-sm colspan="5" = t('admin.tournaments.segments_empty')
 
     / Participants table
     .bg-white.rounded-xl.shadow-sm.border.border-gray-200.overflow-hidden
       .px-6.py-4.border-b.border-gray-100
-        h2.font-semibold.text-gray-800 = "Учасники (#{@participants.size})"
+        h2.font-semibold.text-gray-800 = t('admin.tournaments.participants_table_title', count: @participants.size)
       table.w-full.text-sm
         thead
           tr.bg-gray-50.border-b.border-gray-100.text-left
-            th.px-6.py-3.font-semibold.text-gray-600 Учасник
-            th.px-6.py-3.font-semibold.text-gray-600 Стать
-            th.px-6.py-3.font-semibold.text-gray-600.text-right Бали
-            th.px-6.py-3.font-semibold.text-gray-600.text-right Бонус
-            th.px-6.py-3.font-semibold.text-gray-600.text-center Місце
+            th.px-6.py-3.font-semibold.text-gray-600 = t('admin.tournaments.col_participant')
+            th.px-6.py-3.font-semibold.text-gray-600 = t('admin.tournaments.col_gender')
+            th.px-6.py-3.font-semibold.text-gray-600.text-right = t('admin.tournaments.col_score')
+            th.px-6.py-3.font-semibold.text-gray-600.text-right = t('admin.tournaments.col_bonus')
+            th.px-6.py-3.font-semibold.text-gray-600.text-center = t('admin.tournaments.col_place')
             th.px-6.py-3
         tbody.divide-y.divide-gray-50
           - @participants.each do |p|
@@ -157,13 +157,13 @@
                 - if p.completion_order.present?
                   span.inline-flex.items-center.justify-center.w-6.h-6.rounded-full.bg-orange-100.text-orange-700.text-xs.font-bold = p.completion_order
                 - else
-                  span.text-gray-300 —
+                  span.text-gray-300 = t('admin.shared.no_data')
               td.px-6.py-3.text-right
                 - if @tournament.status != 'completed'
                   = button_to "✕", admin_tournament_tournament_participant_path(@tournament, p),
                       method: :delete,
                       class: "text-xs text-red-400 hover:text-red-600 transition-colors",
-                      data: { turbo_confirm: "Видалити #{p.user.full_name} з турніру?" }
+                      data: { turbo_confirm: t('admin.tournaments.confirm_remove_participant', name: p.user.full_name) }
           - if @participants.empty?
             tr
-              td.px-6.py-6.text-center.text-gray-400.text-sm colspan="6" Немає учасників
+              td.px-6.py-6.text-center.text-gray-400.text-sm colspan="6" = t('admin.tournaments.participants_empty')

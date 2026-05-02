@@ -1,19 +1,19 @@
-- content_for :page_title, "Сегменти"
+- content_for :page_title, t('admin.segments.title')
 
 .flex.items-center.justify-between.mb-6.gap-4.flex-wrap
   = form_with url: admin_segments_path, method: :get, class: "flex-1 max-w-sm" do |f|
-    = f.search_field :q, value: params[:q], placeholder: "Пошук за назвою...",
+    = f.search_field :q, value: params[:q], placeholder: t('admin.segments.search_placeholder'),
         class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-  = link_to "＋ Додати зі Strava", new_admin_segment_path, class: "bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+  = link_to t('admin.segments.add_from_strava'), new_admin_segment_path, class: "bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
 
 .bg-white.rounded-xl.shadow-sm.border.border-gray-200.overflow-hidden
   table.w-full.text-sm
     thead
       tr.bg-gray-50.border-b.border-gray-100.text-left
-        th.px-6.py-3.font-semibold.text-gray-600 Назва
-        th.px-6.py-3.font-semibold.text-gray-600 Дистанція
-        th.px-6.py-3.font-semibold.text-gray-600 Ухил (сер.)
-        th.px-6.py-3.font-semibold.text-gray-600 Strava ID
+        th.px-6.py-3.font-semibold.text-gray-600 = t('admin.segments.col_name')
+        th.px-6.py-3.font-semibold.text-gray-600 = t('admin.segments.col_distance')
+        th.px-6.py-3.font-semibold.text-gray-600 = t('admin.segments.col_grade')
+        th.px-6.py-3.font-semibold.text-gray-600 = t('admin.segments.col_strava_id')
         th.px-6.py-3
     tbody.divide-y.divide-gray-50
       - @segments.each do |s|
@@ -23,11 +23,10 @@
           td.px-6.py-3.text-gray-600 = "#{s.average_grade}%"
           td.px-6.py-3.text-gray-400.font-mono.text-xs = s.strava_id
           td.px-6.py-3.text-right
-            = button_to "Видалити", admin_segment_path(s), method: :delete,
+            = button_to t('admin.shared.delete'), admin_segment_path(s), method: :delete,
                 class: "text-xs text-red-400 hover:text-red-600 transition-colors",
-                data: { turbo_confirm: "Видалити сегмент «#{s.name}»?" }
+                data: { turbo_confirm: t('admin.segments.confirm_delete', name: s.name) }
       - if @segments.empty?
         tr
           td.px-6.py-10.text-center.text-gray-400 colspan="5"
-            | Немає сегментів.&#32;
-            = link_to "Додати перший зі Strava", new_admin_segment_path, class: "text-orange-500 hover:underline"
+            = t('admin.segments.empty_html', link: new_admin_segment_path).html_safe

@@ -1,31 +1,31 @@
-- content_for :page_title, "Dashboard"
+- content_for :page_title, t('admin.dashboard.title')
 
 .grid.grid-cols-2.lg:grid-cols-4.gap-5.mb-8
-  = render 'admin/shared/stat_card', label: 'Турніри',     value: @stats[:tournaments], sub: "#{@stats[:active_tournaments]} активних", color: 'orange'
-  = render 'admin/shared/stat_card', label: 'Сегменти',    value: @stats[:segments],    sub: 'в базі',         color: 'blue'
-  = render 'admin/shared/stat_card', label: 'Користувачі', value: @stats[:users],       sub: 'зареєстровано',  color: 'green'
-  = render 'admin/shared/stat_card', label: 'Активності',  value: @stats[:activities],  sub: 'зі Strava',      color: 'purple'
+  = render 'admin/shared/stat_card', label: t('admin.dashboard.stat_tournaments'), value: @stats[:tournaments], sub: "#{@stats[:active_tournaments]} #{t('admin.dashboard.stat_active')}", color: 'orange'
+  = render 'admin/shared/stat_card', label: t('admin.dashboard.stat_segments'),    value: @stats[:segments],    sub: t('admin.dashboard.stat_in_db'),        color: 'blue'
+  = render 'admin/shared/stat_card', label: t('admin.dashboard.stat_users'),       value: @stats[:users],       sub: t('admin.dashboard.stat_registered'),   color: 'green'
+  = render 'admin/shared/stat_card', label: t('admin.dashboard.stat_activities'),  value: @stats[:activities],  sub: t('admin.dashboard.stat_from_strava'),  color: 'purple'
 
 .grid.grid-cols-1.lg:grid-cols-2.gap-6
 
   .bg-white.rounded-xl.shadow-sm.border.border-gray-200
     .flex.items-center.justify-between.px-6.py-4.border-b.border-gray-100
-      h2.font-semibold.text-gray-800 Останні турніри
-      = link_to "Всі →", admin_tournaments_path, class: "text-sm text-orange-500 hover:text-orange-600"
+      h2.font-semibold.text-gray-800 = t('admin.dashboard.recent_tournaments')
+      = link_to t('admin.shared.all_link'), admin_tournaments_path, class: "text-sm text-orange-500 hover:text-orange-600"
     .divide-y.divide-gray-50
-      - @recent_tournaments.each do |t|
+      - @recent_tournaments.each do |t_item|
         .flex.items-center.justify-between.px-6.py-3
           div
-            = link_to t.name, admin_tournament_path(t), class: "text-sm font-medium text-gray-900 hover:text-orange-500"
-            p.text-xs.text-gray-400.mt-0.5 = "#{t.tournament_participants.size} учасників"
-          = status_badge(t.status)
+            = link_to t_item.name, admin_tournament_path(t_item), class: "text-sm font-medium text-gray-900 hover:text-orange-500"
+            p.text-xs.text-gray-400.mt-0.5 = "#{t_item.tournament_participants.size} #{t('admin.shared.participants_count')}"
+          = status_badge(t_item.status)
       - if @recent_tournaments.empty?
-        p.px-6.py-4.text-sm.text-gray-400 Немає турнірів
+        p.px-6.py-4.text-sm.text-gray-400 = t('admin.dashboard.no_tournaments')
 
   .bg-white.rounded-xl.shadow-sm.border.border-gray-200
     .flex.items-center.justify-between.px-6.py-4.border-b.border-gray-100
-      h2.font-semibold.text-gray-800 Нові користувачі
-      = link_to "Всі →", admin_users_path, class: "text-sm text-orange-500 hover:text-orange-600"
+      h2.font-semibold.text-gray-800 = t('admin.dashboard.recent_users')
+      = link_to t('admin.shared.all_link'), admin_users_path, class: "text-sm text-orange-500 hover:text-orange-600"
     .divide-y.divide-gray-50
       - @recent_users.each do |u|
         .flex.items-center.gap-3.px-6.py-3
@@ -36,7 +36,7 @@
               = u.first_name.to_s[0]
           .flex-1.min-w-0
             = link_to u.full_name, admin_user_path(u), class: "text-sm font-medium text-gray-900 hover:text-orange-500 block truncate"
-            p.text-xs.text-gray-400 = u.gender == 'female' ? 'Жінка' : 'Чоловік'
+            p.text-xs.text-gray-400 = gender_label(u.gender)
           = role_badge(u.role)
       - if @recent_users.empty?
-        p.px-6.py-4.text-sm.text-gray-400 Немає користувачів
+        p.px-6.py-4.text-sm.text-gray-400 = t('admin.dashboard.no_users')
