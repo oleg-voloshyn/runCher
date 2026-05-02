@@ -31,6 +31,6 @@
         = f.datetime_local_field :ends_at, class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
 
   .flex.items-center.gap-3.pt-2
-    = f.submit(tournament.new_record? ? t('admin.tournaments.create_button') : t('admin.shared.save')),
-        class: "bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-5 py-2 rounded-lg cursor-pointer transition-colors"
+    - btn_label = tournament.new_record? ? t('admin.tournaments.create_button') : t('admin.shared.save')
+    = f.submit btn_label, class: "bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-5 py-2 rounded-lg cursor-pointer transition-colors"
     = link_to t('admin.shared.cancel'), admin_tournaments_path, class: "text-sm text-gray-500 hover:text-gray-700"
