@@ -56,11 +56,7 @@
                 prompt: (@available_users.any? ? 'Оберіть користувача...' : 'Усі користувачі вже учасники'),
                 disabled: @available_users.empty?,
                 class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 disabled:bg-gray-50 disabled:text-gray-400"
-          div
-            label.block.text-xs.font-medium.text-gray-600.mb-1 Стать (для рейтингу)
-            = select_tag 'tournament_participant[gender]',
-                options_for_select([['♂ Чоловік', 'male'], ['♀ Жінка', 'female']]),
-                class: "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+
           = f.submit "Додати", class: "w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium py-2 rounded-lg cursor-pointer transition-colors"
 
     / Add segment form
