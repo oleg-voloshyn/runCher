@@ -26,7 +26,6 @@ export const api = {
   createTournament: (data) =>
     request('/tournaments', { method: 'POST', body: { tournament: data } }),
   joinTournament: (id) => request(`/tournaments/${id}/join`, { method: 'POST' }),
-  leaveTournament: (id) => request(`/tournaments/${id}/leave`, { method: 'DELETE' }),
 
   // Leaderboard
   getLeaderboard: (id, gender) =>

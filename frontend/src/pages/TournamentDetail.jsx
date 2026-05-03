@@ -20,7 +20,6 @@ export default function TournamentDetail() {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { data: tournament, loading, error, setData } = useApi(() => api.getTournament(id), [id])
-  const [joining, setJoining] = useState(false)
   const [syncing, setSyncing] = useState(false)
   const [nextSyncAt, setNextSyncAt] = useState(() =>
     user?.next_sync_at ? new Date(user.next_sync_at) : null
@@ -28,24 +27,14 @@ export default function TournamentDetail() {
   const syncOnCooldown = nextSyncAt && nextSyncAt > new Date()
   const locale = i18n.language === 'uk' ? 'uk-UA' : 'en-GB'
 
+  const [joining, setJoining] = useState(false)
+
   async function handleJoin() {
     if (!user) return navigate('/')
     setJoining(true)
     try {
       await api.joinTournament(id)
       setData((t) => ({ ...t, joined: true, participants_count: t.participants_count + 1 }))
-    } catch (e) {
-      alert(e.message)
-    } finally {
-      setJoining(false)
-    }
-  }
-
-  async function handleLeave() {
-    setJoining(true)
-    try {
-      await api.leaveTournament(id)
-      setData((t) => ({ ...t, joined: false, participants_count: t.participants_count - 1 }))
     } catch (e) {
       alert(e.message)
     } finally {
@@ -141,30 +130,21 @@ export default function TournamentDetail() {
         {status === 'active' && user && (
           <div className="flex flex-wrap gap-2">
             {joined ? (
-              <>
-                <div className="flex flex-col items-start gap-0.5">
-                  <button
-                    onClick={handleSync}
-                    disabled={syncing || syncOnCooldown}
-                    className="flex items-center gap-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium px-4 py-2 rounded-xl transition-colors disabled:opacity-50"
-                  >
-                    {syncing ? <Spinner className="h-4 w-4" /> : '🔄'} {t('detail.syncStrava')}
-                  </button>
-                  {syncOnCooldown && (
-                    <span className="text-xs text-gray-400 px-1">
-                      {t('profile.nextSyncAt')}{' '}
-                      {nextSyncAt.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                  )}
-                </div>
+              <div className="flex flex-col items-start gap-0.5">
                 <button
-                  onClick={handleLeave}
-                  disabled={joining}
-                  className="text-sm text-red-500 hover:text-red-700 border border-red-200 px-4 py-2 rounded-xl transition-colors disabled:opacity-50"
+                  onClick={handleSync}
+                  disabled={syncing || syncOnCooldown}
+                  className="flex items-center gap-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium px-4 py-2 rounded-xl transition-colors disabled:opacity-50"
                 >
-                  {t('detail.leaveTournament')}
+                  {syncing ? <Spinner className="h-4 w-4" /> : '🔄'} {t('detail.syncStrava')}
                 </button>
-              </>
+                {syncOnCooldown && (
+                  <span className="text-xs text-gray-400 px-1">
+                    {t('profile.nextSyncAt')}{' '}
+                    {nextSyncAt.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                )}
+              </div>
             ) : (
               <button
                 onClick={handleJoin}
