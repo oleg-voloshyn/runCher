@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
+import { stravaLoginUrl } from '../api/client'
 
 export default function Navbar() {
   const { user } = useAuth()
@@ -88,7 +89,7 @@ export default function Navbar() {
             </div>
           ) : (
             <a
-              href="/auth/strava/login"
+              href={stravaLoginUrl()}
               className="flex items-center gap-2 bg-[#fc4c02] hover:bg-[#e04400] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
             >
               <StravaIcon />
@@ -107,7 +108,7 @@ export default function Navbar() {
           </button>
           {!user && (
             <a
-              href="/auth/strava/login"
+              href={stravaLoginUrl()}
               className="flex items-center gap-1.5 bg-[#fc4c02] hover:bg-[#e04400] text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
             >
               <StravaIcon />
