@@ -59,7 +59,7 @@ module Admin
     private
 
     def set_tournament
-      @tournament = Tournament.find(params[:id])
+      @tournament = Tournament.find_by(slug: params[:id]) || Tournament.find(params[:id])
     end
 
     def tournament_params
