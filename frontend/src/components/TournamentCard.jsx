@@ -11,6 +11,7 @@ export default function TournamentCard({ tournament }) {
   const { t, i18n } = useTranslation()
   const {
     id,
+    slug,
     name,
     description,
     status,
@@ -25,7 +26,7 @@ export default function TournamentCard({ tournament }) {
 
   return (
     <Link
-      to={`/tournaments/${id}`}
+      to={`/tournaments/${slug || id}`}
       className="block bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 hover:shadow-md hover:border-orange-200 transition-all group"
     >
       <div className="flex items-start justify-between gap-3 mb-3">

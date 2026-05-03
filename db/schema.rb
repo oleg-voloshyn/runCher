@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_02_205708) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_03_075305) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -116,11 +116,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_02_205708) do
     t.datetime "ends_at"
     t.string "name", null: false
     t.integer "rated_segments_count", null: false
+    t.string "slug", null: false
     t.datetime "starts_at"
     t.string "status", default: "draft", null: false
     t.integer "total_segments_count", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_tournaments_on_created_by_id"
+    t.index ["slug"], name: "index_tournaments_on_slug", unique: true
     t.index ["status"], name: "index_tournaments_on_status"
   end
 

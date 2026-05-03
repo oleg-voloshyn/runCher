@@ -142,7 +142,7 @@ export default function Profile() {
                   <div key={tournament.id} className="px-4 sm:px-6 py-4">
                     <div className="flex items-start justify-between gap-2">
                       <a
-                        href={`/tournaments/${tournament.id}`}
+                        href={`/tournaments/${tournament.slug || tournament.id}`}
                         className="font-semibold text-gray-900 hover:text-[#fc4c02] transition-colors text-sm sm:text-base leading-tight"
                       >
                         {tournament.name}
@@ -166,7 +166,7 @@ export default function Profile() {
                         )}
                       </div>
                       <a
-                        href={`/tournaments/${tournament.id}/leaderboard`}
+                        href={`/tournaments/${tournament.slug || tournament.id}/leaderboard`}
                         className="text-xs text-[#fc4c02] hover:underline shrink-0"
                       >
                         {t('profile.leaderboard')}

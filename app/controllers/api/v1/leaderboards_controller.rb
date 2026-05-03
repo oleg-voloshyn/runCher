@@ -4,7 +4,8 @@ module Api
       skip_before_action :authenticate_user!, only: [:show]
 
       def show
-        tournament = Tournament.find(params[:tournament_id])
+        tournament = Tournament.find_by(slug: params[:tournament_id]) || Tournament.find_by(id: params[:tournament_id])
+        return render json: { error: 'Tournament not found' }, status: :not_found unless tournament
         gender = params[:gender]
 
         participants = tournament.tournament_participants

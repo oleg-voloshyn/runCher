@@ -76,9 +76,8 @@ module Api
       private
 
       def set_tournament
-        @tournament = Tournament.find(params[:id])
-      rescue ActiveRecord::RecordNotFound
-        render json: { error: 'Tournament not found' }, status: :not_found
+        @tournament = Tournament.find_by(slug: params[:id]) || Tournament.find_by(id: params[:id])
+        render json: { error: 'Tournament not found' }, status: :not_found unless @tournament
       end
 
       def tournament_params
@@ -91,6 +90,7 @@ module Api
       def tournament_json(t, detail: false)
         json = {
           id:                    t.id,
+          slug:                  t.slug,
           name:                  t.name,
           description:           t.description,
           status:                t.status,
