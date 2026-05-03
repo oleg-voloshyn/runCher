@@ -119,58 +119,51 @@ export default function TournamentDetail() {
         </div>
 
         {/* Action buttons */}
-        {status === 'active' && !user && (
-          <a
-            href="/"
-            className="inline-flex items-center gap-2 bg-[#fc4c02] hover:bg-[#e04400] text-white font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
-          >
-            {t('detail.loginToJoin')}
-          </a>
-        )}
-        {status === 'active' && user && (
-          <div className="flex flex-wrap gap-2">
-            {joined ? (
-              <div className="flex flex-col items-start gap-0.5">
-                <button
-                  onClick={handleSync}
-                  disabled={syncing || syncOnCooldown}
-                  className="flex items-center gap-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium px-4 py-2 rounded-xl transition-colors disabled:opacity-50"
-                >
-                  {syncing ? <Spinner className="h-4 w-4" /> : '🔄'} {t('detail.syncStrava')}
-                </button>
-                {syncOnCooldown && (
-                  <span className="text-xs text-gray-400 px-1">
-                    {t('profile.nextSyncAt')}{' '}
-                    {nextSyncAt.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}
-                  </span>
-                )}
-              </div>
-            ) : (
-              <button
-                onClick={handleJoin}
-                disabled={joining}
-                className="bg-[#fc4c02] hover:bg-[#e04400] text-white font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors disabled:opacity-50"
-              >
-                {joining ? t('detail.joining') : t('detail.join')}
-              </button>
-            )}
-            <Link
-              to={`/tournaments/${id}/leaderboard`}
-              className="border border-[#fc4c02] text-[#fc4c02] hover:bg-orange-50 font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
+        <div className="flex flex-wrap items-center gap-3">
+          {status === 'active' && !user && (
+            <a
+              href="/"
+              className="inline-flex items-center gap-2 bg-[#fc4c02] hover:bg-[#e04400] text-white font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
             >
-              {t('detail.leaderboard')}
-            </Link>
-          </div>
-        )}
-
-        {!(status === 'active' && user) && (
+              {t('detail.loginToJoin')}
+            </a>
+          )}
+          {status === 'active' && user && (
+            <>
+              {joined ? (
+                <div className="flex flex-col items-start gap-0.5">
+                  <button
+                    onClick={handleSync}
+                    disabled={syncing || syncOnCooldown}
+                    className="flex items-center gap-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium px-4 py-2 rounded-xl transition-colors disabled:opacity-50"
+                  >
+                    {syncing ? <Spinner className="h-4 w-4" /> : '🔄'} {t('detail.syncStrava')}
+                  </button>
+                  {syncOnCooldown && (
+                    <span className="text-xs text-gray-400 px-1">
+                      {t('profile.nextSyncAt')}{' '}
+                      {nextSyncAt.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  )}
+                </div>
+              ) : (
+                <button
+                  onClick={handleJoin}
+                  disabled={joining}
+                  className="bg-[#fc4c02] hover:bg-[#e04400] text-white font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors disabled:opacity-50"
+                >
+                  {joining ? t('detail.joining') : t('detail.join')}
+                </button>
+              )}
+            </>
+          )}
           <Link
             to={`/tournaments/${id}/leaderboard`}
             className="inline-flex border border-[#fc4c02] text-[#fc4c02] hover:bg-orange-50 font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
           >
             {t('detail.leaderboard')}
           </Link>
-        )}
+        </div>
       </div>
 
       {/* Joined banner */}
