@@ -1,6 +1,8 @@
 module Api
   module V1
     class LeaderboardsController < BaseController
+      skip_before_action :authenticate_user!, only: [:show]
+
       def show
         tournament = Tournament.find(params[:tournament_id])
         gender = params[:gender]

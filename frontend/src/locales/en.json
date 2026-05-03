@@ -58,6 +58,7 @@
     "leaveTournament": "Leave tournament",
     "joining": "Joining...",
     "join": "Join",
+    "loginToJoin": "Sign in with Strava to join",
     "leaderboard": "🏆 Leaderboard",
     "participantBanner": "You are participating in this tournament. Run the segments and sync your activities with Strava.",
     "tournamentSegments": "Tournament segments",

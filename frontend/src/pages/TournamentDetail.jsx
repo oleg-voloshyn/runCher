@@ -29,7 +29,7 @@ export default function TournamentDetail() {
   const locale = i18n.language === 'uk' ? 'uk-UA' : 'en-GB'
 
   async function handleJoin() {
-    if (!user) return navigate('/login')
+    if (!user) return navigate('/')
     setJoining(true)
     try {
       await api.joinTournament(id)
@@ -130,6 +130,14 @@ export default function TournamentDetail() {
         </div>
 
         {/* Action buttons */}
+        {status === 'active' && !user && (
+          <a
+            href="/"
+            className="inline-flex items-center gap-2 bg-[#fc4c02] hover:bg-[#e04400] text-white font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
+          >
+            {t('detail.loginToJoin')}
+          </a>
+        )}
         {status === 'active' && user && (
           <div className="flex flex-wrap gap-2">
             {joined ? (

@@ -1,11 +1,12 @@
 module Api
   module V1
     class TournamentsController < BaseController
+      skip_before_action :authenticate_user!, only: [:index, :show]
       before_action :set_tournament, only: [:show, :update, :destroy, :join, :leave, :activate, :complete]
       before_action :require_moderator!, only: [:create, :update, :destroy, :activate, :complete]
 
       def index
-        tournaments = current_user.admin? ? Tournament.all : Tournament.visible
+        tournaments = current_user&.admin? ? Tournament.all : Tournament.visible
         render json: tournaments.order(created_at: :desc).map { |t| tournament_json(t) }
       end
 
@@ -98,7 +99,7 @@ module Api
           total_segments_count:  t.total_segments_count,
           rated_segments_count:  t.rated_segments_count,
           participants_count:    t.tournament_participants.size,
-          joined:                t.participant_for(current_user).present?
+          joined:                current_user ? t.participant_for(current_user).present? : false
         }
 
         if detail
@@ -108,7 +109,7 @@ module Api
 
           json[:segments] = t.all_tournament_segments.map do |ts|
             seg = ts.segment
-            show_rated = current_user.moderator? || revealed_ids.include?(seg.id)
+            show_rated = current_user&.moderator? || revealed_ids.include?(seg.id)
             {
               id:              seg.id,
               strava_id:       seg.strava_id,
