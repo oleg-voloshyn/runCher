@@ -40,10 +40,12 @@
           = t('admin.users.sync_activities_count', total: @user.activities.count, unprocessed: @user.activities.where(processed: false).count)
         .space-y-2
           = button_to t('admin.users.sync_reprocess'), reprocess_activities_admin_user_path(@user), method: :post,
-              class: "w-full text-left px-3 py-2 rounded-lg text-sm bg-orange-50 text-orange-700 hover:bg-orange-100 transition-colors"
+              class: "w-full text-left px-3 py-2 rounded-lg text-sm bg-orange-50 text-orange-700 hover:bg-orange-100 transition-colors cursor-pointer",
+              form_class: "cursor-pointer"
           = button_to t('admin.users.sync_reset'), reset_sync_admin_user_path(@user), method: :post,
               data: { turbo_confirm: t('admin.users.sync_reset_confirm') },
-              class: "w-full text-left px-3 py-2 rounded-lg text-sm bg-gray-50 text-gray-700 hover:bg-gray-100 transition-colors"
+              class: "w-full text-left px-3 py-2 rounded-lg text-sm bg-gray-50 text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer",
+              form_class: "cursor-pointer"
 
     / Change role (admin only)
     - if current_user.admin? && current_user != @user
