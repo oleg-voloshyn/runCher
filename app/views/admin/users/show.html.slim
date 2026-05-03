@@ -21,7 +21,8 @@
       dl.space-y-2.text-sm.border-t.border-gray-100.pt-4
         .flex.justify-between
           dt.text-gray-500 = t('admin.users.show_strava_id')
-          dd.text-gray-700.font-mono.text-xs = @user.strava_id
+          dd
+            = link_to @user.strava_id, "https://www.strava.com/athletes/#{@user.strava_id}", target: "_blank", rel: "noreferrer", class: "font-mono text-xs text-orange-500 hover:underline"
         .flex.justify-between
           dt.text-gray-500 = t('admin.users.show_registered')
           dd.text-gray-700 = @user.created_at.strftime('%d.%m.%Y')
@@ -52,8 +53,10 @@
             = button_to r.capitalize, update_role_admin_user_path(@user), method: :patch, params: { role: r },
                 class: "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors #{@user.role == r ? 'bg-orange-500 text-white font-semibold' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'}"
 
-  / Participations
-  .lg:col-span-2
+  / Right column
+  .lg:col-span-2.space-y-6
+
+    / Participations
     .bg-white.rounded-xl.shadow-sm.border.border-gray-200.overflow-hidden
       .px-6.py-4.border-b.border-gray-100
         h2.font-semibold.text-gray-800 = t('admin.users.show_participations')
@@ -82,3 +85,42 @@
           - if @participations.empty?
             tr
               td.px-6.py-8.text-center.text-gray-400 colspan="5" = t('admin.users.show_no_participations')
+
+    / Activities
+    .bg-white.rounded-xl.shadow-sm.border.border-gray-200.overflow-hidden
+      .px-6.py-4.border-b.border-gray-100.flex.items-center.justify-between
+        h2.font-semibold.text-gray-800 Активності (#{@activities.size})
+        span.text-xs.text-gray-400 останні 50
+      - if @activities.empty?
+        .px-6.py-8.text-center.text-gray-400.text-sm Активностей немає
+      - else
+        table.w-full.text-sm
+          thead
+            tr.bg-gray-50.border-b.border-gray-100.text-left
+              th.px-4.py-2.font-semibold.text-gray-600 Назва
+              th.px-4.py-2.font-semibold.text-gray-600 Дата
+              th.px-4.py-2.font-semibold.text-gray-600.text-right Дист.
+              th.px-4.py-2.font-semibold.text-gray-600.text-center Сегм.
+              th.px-4.py-2.font-semibold.text-gray-600.text-center Статус
+          tbody.divide-y.divide-gray-50
+            - @activities.each do |a|
+              tr.hover:bg-gray-50
+                td.px-4.py-2.font-medium.text-gray-900.max-w-xs.truncate
+                  = link_to a.name, "https://www.strava.com/activities/#{a.strava_activity_id}", target: "_blank", rel: "noreferrer", class: "hover:text-orange-500"
+                td.px-4.py-2.text-gray-500.text-xs.whitespace-nowrap = a.start_date&.strftime('%d.%m.%Y %H:%M')
+                td.px-4.py-2.text-right.text-gray-700.text-xs
+                  - if a.distance
+                    = "#{"%.1f" % (a.distance / 1000.0)} км"
+                  - else
+                    span.text-gray-300 —
+                td.px-4.py-2.text-center
+                  - count = a.segment_efforts.size
+                  - if count > 0
+                    span.inline-flex.items-center.justify-center.px-2.py-0.5.rounded-full.text-xs.font-semibold.bg-orange-50.text-orange-700 = count
+                  - else
+                    span.text-gray-300.text-xs 0
+                td.px-4.py-2.text-center
+                  - if a.processed?
+                    span.inline-flex.items-center.gap-1.text-xs.text-green-600 ✓
+                  - else
+                    span.inline-flex.items-center.gap-1.text-xs.text-amber-500 ⏳

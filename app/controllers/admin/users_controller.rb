@@ -11,6 +11,7 @@ module Admin
 
     def show
       @participations = @user.tournament_participants.includes(:tournament).order(created_at: :desc)
+      @activities = @user.activities.includes(:segment_efforts).order(start_date: :desc).limit(50)
     end
 
     def reprocess_activities
