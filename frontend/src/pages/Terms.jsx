@@ -121,8 +121,8 @@ export default function Terms() {
             <h2 className="text-lg font-bold text-gray-900 mb-3">11. Contact</h2>
             <p>
               Questions about these Terms can be directed to{' '}
-              <a href="mailto:contact@runcher.com.ua" className="text-[#fc4c02] hover:underline">
-                contact@runcher.com.ua
+              <a href="mailto:oleh.runcher@gmail.com" className="text-[#fc4c02] hover:underline">
+                oleh.runcher@gmail.com
               </a>
               .
             </p>

@@ -135,8 +135,8 @@ export default function PrivacyPolicy() {
             <p>
               If you have questions about this Privacy Policy or want to request data deletion,
               please contact us at{' '}
-              <a href="mailto:contact@runcher.com.ua" className="text-[#fc4c02] hover:underline">
-                contact@runcher.com.ua
+              <a href="mailto:oleh.runcher@gmail.com" className="text-[#fc4c02] hover:underline">
+                oleh.runcher@gmail.com
               </a>
               .
             </p>
