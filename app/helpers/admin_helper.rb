@@ -1,6 +1,7 @@
 module AdminHelper
   def admin_nav_link(label, path, icon: nil)
-    active = current_page?(path) || request.path.start_with?(path.sub(/\/$/, ''))
+    exact_match_only = (path == '/admin' || path == '/admin/')
+    active = current_page?(path) || (!exact_match_only && request.path.start_with?("#{path.chomp('/')}/"))
     base   = "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
     cls    = active ? "#{base} bg-orange-500 text-white" : "#{base} text-slate-400 hover:bg-slate-800 hover:text-white"
 
