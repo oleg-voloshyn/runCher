@@ -5,7 +5,13 @@ import { stravaLoginUrl } from '../api/client'
 
 export default function Home() {
   const { user } = useAuth()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+
+  function toggleLanguage() {
+    const next = i18n.language === 'uk' ? 'en' : 'uk'
+    i18n.changeLanguage(next)
+    localStorage.setItem('lang', next)
+  }
 
   const steps = [
     { step: '01', icon: '🗺️', title: t('home.step1Title'), desc: t('home.step1Desc') },
@@ -41,6 +47,13 @@ export default function Home() {
         </div>
 
         <div className="relative max-w-6xl mx-auto px-6 py-16 sm:py-24 lg:py-36 text-center">
+          <button
+            onClick={toggleLanguage}
+            className="absolute top-4 right-6 text-xs font-semibold text-white/50 hover:text-white border border-white/20 hover:border-white/40 rounded-md px-2.5 py-1 transition-colors backdrop-blur-sm"
+          >
+            {i18n.language === 'uk' ? 'EN' : 'UA'}
+          </button>
+
           <div className="inline-flex items-center gap-2 bg-white/10 text-orange-300 text-sm font-medium px-4 py-2 rounded-full mb-6 backdrop-blur-sm">
             🏃 Черкаси · Strava Segments
           </div>
@@ -153,8 +166,17 @@ export default function Home() {
         </section>
       )}
 
-      <footer className="border-t border-gray-100 py-8 text-center text-sm text-gray-400">
-        RunCher © {new Date().getFullYear()} · {t('home.footer')}
+      <footer className="border-t border-gray-100 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
+          <span>© {new Date().getFullYear()} RunCher</span>
+          <div className="flex items-center gap-4">
+            <Link to="/privacy" className="hover:text-gray-600 transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-gray-600 transition-colors">Terms of Service</Link>
+            <a href="https://www.strava.com" target="_blank" rel="noreferrer" className="hover:text-gray-600 transition-colors">
+              Powered by Strava
+            </a>
+          </div>
+        </div>
       </footer>
     </div>
   )
