@@ -74,13 +74,21 @@ export default function Home() {
               {t('home.viewTournaments')}
             </Link>
           ) : (
-            <a
-              href={stravaLoginUrl()}
-              className="inline-flex items-center gap-3 bg-[#fc4c02] hover:bg-[#e04400] text-white font-bold text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-colors shadow-lg shadow-orange-900/30"
-            >
-              <StravaIcon size={22} />
-              {t('home.loginWithStrava')}
-            </a>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a
+                href={stravaLoginUrl()}
+                className="inline-flex items-center gap-3 bg-[#fc4c02] hover:bg-[#e04400] text-white font-bold text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-colors shadow-lg shadow-orange-900/30"
+              >
+                <StravaIcon size={22} />
+                {t('home.loginWithStrava')}
+              </a>
+              <Link
+                to="/tournaments"
+                className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-colors backdrop-blur-sm"
+              >
+                {t('home.viewTournaments')} →
+              </Link>
+            </div>
           )}
         </div>
       </section>
