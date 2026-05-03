@@ -134,3 +134,18 @@ uk:
       col_score: Бали
       col_bonus: Бонус
       col_place: Місце
+      sync_title: Синхронізація
+      sync_last_synced: "last_synced_at:"
+      sync_activities_count: "активностей: %{total} (необроблених: %{unprocessed})"
+      sync_reprocess: Повторно обробити необроблені
+      sync_reset: Скинути last_synced_at
+      sync_reset_confirm: "Скинути мітку синхронізації? Наступний синк завантажить всі активності з початку турніру."
+      activities_title: "Активності (%{count})"
+      activities_last: останні 50
+      activities_empty: Активностей немає
+      activities_col_name: Назва
+      activities_col_date: Дата
+      activities_col_distance: Дист.
+      activities_col_segments: Сегм.
+      activities_col_status: Статус
+      activities_km: км

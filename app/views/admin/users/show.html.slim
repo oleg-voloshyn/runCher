@@ -33,15 +33,16 @@
     / Sync tools (admin only)
     - if current_user.admin?
       .bg-white.rounded-xl.shadow-sm.border.border-gray-200.p-5
-        h3.text-sm.font-semibold.text-gray-700.mb-1 Синхронізація
+        h3.text-sm.font-semibold.text-gray-700.mb-1 = t('admin.users.sync_title')
         .text-xs.text-gray-400.mb-3
-          | last_synced_at: #{@user.last_synced_at&.strftime('%d.%m %H:%M') || '—'}
-          | &nbsp;·&nbsp; активностей: #{@user.activities.count} (необроблених: #{@user.activities.where(processed: false).count})
+          | #{t('admin.users.sync_last_synced')} #{@user.last_synced_at&.strftime('%d.%m %H:%M') || '—'}
+          | &nbsp;·&nbsp;
+          = t('admin.users.sync_activities_count', total: @user.activities.count, unprocessed: @user.activities.where(processed: false).count)
         .space-y-2
-          = button_to 'Повторно обробити необроблені', reprocess_activities_admin_user_path(@user), method: :post,
+          = button_to t('admin.users.sync_reprocess'), reprocess_activities_admin_user_path(@user), method: :post,
               class: "w-full text-left px-3 py-2 rounded-lg text-sm bg-orange-50 text-orange-700 hover:bg-orange-100 transition-colors"
-          = button_to 'Скинути last_synced_at', reset_sync_admin_user_path(@user), method: :post,
-              data: { turbo_confirm: 'Скинути мітку синхронізації? Наступний синк завантажить всі активності з початку турніру.' },
+          = button_to t('admin.users.sync_reset'), reset_sync_admin_user_path(@user), method: :post,
+              data: { turbo_confirm: t('admin.users.sync_reset_confirm') },
               class: "w-full text-left px-3 py-2 rounded-lg text-sm bg-gray-50 text-gray-700 hover:bg-gray-100 transition-colors"
 
     / Change role (admin only)
@@ -89,19 +90,19 @@
     / Activities
     .bg-white.rounded-xl.shadow-sm.border.border-gray-200.overflow-hidden
       .px-6.py-4.border-b.border-gray-100.flex.items-center.justify-between
-        h2.font-semibold.text-gray-800 Активності (#{@activities.size})
-        span.text-xs.text-gray-400 останні 50
+        h2.font-semibold.text-gray-800 = t('admin.users.activities_title', count: @activities.size)
+        span.text-xs.text-gray-400 = t('admin.users.activities_last')
       - if @activities.empty?
-        .px-6.py-8.text-center.text-gray-400.text-sm Активностей немає
+        .px-6.py-8.text-center.text-gray-400.text-sm = t('admin.users.activities_empty')
       - else
         table.w-full.text-sm
           thead
             tr.bg-gray-50.border-b.border-gray-100.text-left
-              th.px-4.py-2.font-semibold.text-gray-600 Назва
-              th.px-4.py-2.font-semibold.text-gray-600 Дата
-              th.px-4.py-2.font-semibold.text-gray-600.text-right Дист.
-              th.px-4.py-2.font-semibold.text-gray-600.text-center Сегм.
-              th.px-4.py-2.font-semibold.text-gray-600.text-center Статус
+              th.px-4.py-2.font-semibold.text-gray-600 = t('admin.users.activities_col_name')
+              th.px-4.py-2.font-semibold.text-gray-600 = t('admin.users.activities_col_date')
+              th.px-4.py-2.font-semibold.text-gray-600.text-right = t('admin.users.activities_col_distance')
+              th.px-4.py-2.font-semibold.text-gray-600.text-center = t('admin.users.activities_col_segments')
+              th.px-4.py-2.font-semibold.text-gray-600.text-center = t('admin.users.activities_col_status')
           tbody.divide-y.divide-gray-50
             - @activities.each do |a|
               tr.hover:bg-gray-50
@@ -110,7 +111,7 @@
                 td.px-4.py-2.text-gray-500.text-xs.whitespace-nowrap = a.start_date&.strftime('%d.%m.%Y %H:%M')
                 td.px-4.py-2.text-right.text-gray-700.text-xs
                   - if a.distance
-                    = "#{"%.1f" % (a.distance / 1000.0)} км"
+                    = "#{"%.1f" % (a.distance / 1000.0)} #{t('admin.users.activities_km')}"
                   - else
                     span.text-gray-300 —
                 td.px-4.py-2.text-center

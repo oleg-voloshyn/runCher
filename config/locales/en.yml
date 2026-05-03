@@ -164,3 +164,18 @@ en:
       col_score: Score
       col_bonus: Bonus
       col_place: Place
+      sync_title: Sync
+      sync_last_synced: "last_synced_at:"
+      sync_activities_count: "activities: %{total} (unprocessed: %{unprocessed})"
+      sync_reprocess: Reprocess unprocessed
+      sync_reset: Reset last_synced_at
+      sync_reset_confirm: "Reset sync marker? Next sync will load all activities from the tournament start date."
+      activities_title: "Activities (%{count})"
+      activities_last: last 50
+      activities_empty: No activities
+      activities_col_name: Name
+      activities_col_date: Date
+      activities_col_distance: Dist.
+      activities_col_segments: Segs.
+      activities_col_status: Status
+      activities_km: km
